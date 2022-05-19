@@ -1,0 +1,83 @@
+# header.h
+!calendar.cpp stdio.h time.h #<#>
+!header.h graphics.h keys_n_colors.h #<#>
+!view.cpp graphics.h header.h keys_n_colors.h limits.h stdio.h stdlib.h time.h #<#>
+ struct@date _type_ #<header.h>
+ struct@day _type_ #<header.h>
+ struct@month _type_ #<header.h>
+ struct@year _type_ #<header.h>
+CALENDAR_X #<header.h>
+CALENDAR_Y #<header.h>
+CUR_MONTH_X #<header.h>
+CUR_MONTH_Y #<header.h>
+CUR_YEAR_X #<header.h>
+CUR_YEAR_Y #<header.h>
+DAYS_OFFSET_X #<header.h>
+DAYS_OFFSET_Y #<header.h>
+EDIT_X #<header.h>
+EDIT_Y #<header.h>
+IMAGE_INDEX : enum #<header.h>
+NOTE_H #<header.h>
+NOTE_SIZE #<header.h>
+NOTE_TEXT_X #<header.h>
+NOTE_TEXT_Y #<header.h>
+NOTE_W #<header.h>
+NOTE_X #<header.h>
+NOTE_Y #<header.h>
+PLANS_OFFSET_X #<header.h>
+PLANS_OFFSET_Y #<header.h>
+TIME_H #<header.h>
+TIME_X #<header.h>
+TIME_Y #<header.h>
+about_handler() -> void #<view.cpp>
+calendar_handler() -> void #<view.cpp>
+calendar_update() -> void #<view.cpp>
+clear_month() -> void #<view.cpp>
+clear_note() -> void #<view.cpp>
+clear_year() -> void #<view.cpp>
+curDay : int #<view.cpp>
+curMonth : int #<view.cpp>
+curPage : int #<view.cpp>
+curWeekday : int #<view.cpp>
+curYear : int #<view.cpp>
+date _type_ #<header.h>
+date_to_time(date* d) -> time_t #<view.cpp>
+day _type_ #<header.h>
+day_handler() -> void #<view.cpp>
+days_in_month(int year, int month) -> int #<header.h>
+dim : const int[] #<header.h>
+draw_days(int y, int m) -> void #<view.cpp>
+draw_weekdays() -> void #<view.cpp>
+getmaxdays(int month, int year) -> int #<calendar.cpp>
+hour_handler() -> void #<view.cpp>
+images : IMAGE*[] #<header.h>
+init() -> void #<view.cpp>
+is_days_clicked(int x, int y) -> int #<view.cpp>
+is_leap_year(int year) -> int #<header.h>
+load_images() -> void #<view.cpp>
+load_notes() -> void #<view.cpp>
+main() -> int #<view.cpp>
+main(void) -> int #<calendar.cpp>
+month _type_ #<header.h>
+month_str(int m) -> const char* #<view.cpp>
+mts : const char*[] #<header.h>
+save_notes() -> void #<view.cpp>
+time_to_date(time_t t, date* entry) -> void #<view.cpp>
+unload_images() -> void #<view.cpp>
+update_month() -> void #<view.cpp>
+update_year() -> void #<view.cpp>
+weekday(int dat, int month, int year) -> int #<calendar.cpp>
+wname : const char*[] #<header.h>
+xname : const char*[] #<header.h>
+year _type_ #<header.h>
+years : year[] #<header.h>
+	date::year : int #<header.h>
+	date::month : int #<header.h>
+	date::weekday : int #<header.h>
+	date::day : int #<header.h>
+	day::isEmpty : int #<header.h>
+	day::note : char[] #<header.h>
+	month::amount : int #<header.h>
+	month::days : day[] #<header.h>
+	year::amount : int #<header.h>
+	year::months : month[] #<header.h>

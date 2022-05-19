@@ -10,6 +10,7 @@ int curWeekday = 0;
 int curDay = 0;
 int curPage = 0;
 
+
 // Загрузка изображений
 void load_images()
 {
