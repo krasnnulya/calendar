@@ -1,8 +1,120 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include<graphics.h>
 
-#include "header.h"
+// Макросы определяют положения объектов
+// Чтобы не вводить каждый раз вручную
+#define CUR_MONTH_X 180
+#define CUR_MONTH_Y 80
+
+#define CUR_YEAR_X 180
+#define CUR_YEAR_Y 120
+
+#define DAYS_OFFSET_X 25
+#define DAYS_OFFSET_Y 200
+
+#define PLANS_OFFSET_X 20
+#define PLANS_OFFSET_Y 190
+
+#define CALENDAR_X 50
+#define CALENDAR_Y 230
+
+#define TIME_X 435
+#define TIME_Y 110
+#define TIME_H 107
+
+#define NOTE_X 474
+#define NOTE_Y 52
+#define NOTE_W 765
+#define NOTE_H 106
+
+#define NOTE_TEXT_X 25
+#define NOTE_TEXT_Y 590
+
+#define EDIT_X 280
+#define EDIT_Y 550
+
+#define NOTE_SIZE 50
+
+// Изображения
+IMAGE *images[9];
+
+// Индексы в массиве
+enum IMAGE_INDEX
+{
+   IMG_ADAY,
+   IMG_BACKGROUND,
+   IMG_DATA,
+   IMG_EDAY,
+   IMG_NDAY,
+   IMG_WEEKENDS,
+   IMG_ABOUT,
+   IMG_EDIT,
+   IMG_THESE
+};
+
+// Структура для даты (удобно)
+/*typedef struct date
+{
+   int year;
+   int month;
+   int weekday;
+   int day;
+} date; */
+
+int date, d;
+
+typedef struct day
+{
+   char note[NOTE_SIZE];
+} day;
+
+
+typedef struct month
+{
+   int amount; // кол-во записей на день, если > 0 то ставится зеленая меткa
+   day days[31];
+} month;
+
+typedef struct year
+{
+   int amount; // кол-во записей на день, если > 0 то ставится зеленая метка
+   month months[12];
+} year;
+
+year years[5]; // Массив-дерево
+
+// Кол-во дней в месяцах (невисокосных)
+const int dim[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const char *mts[12] = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
+ 
+
+// Является ли год високосным?
+int is_leap_year(int year)
+
+{
+   if (year % 4 == 0)
+      return 1;
+
+   if (year % 100 == 0)
+      return 0;
+
+   if (year % 400 == 0)
+      return 1;
+
+   return false;
+}
+
+// Количество дней в месяце
+int days_in_month(int year, int month)
+{
+   if (is_leap_year(year) && month == 1)
+      return 29;
+   else return dim[month];
+}
+
+
 
 int curYear = 2022;
 int curMonth = 4;
@@ -39,6 +151,13 @@ void unload_images()
 
 }
 
+
+// Запрос текущей даты
+/*date = tm.tm_mday;
+month = tm.tm_mon + 1;
+year = tm.tm_year + 1900;*/
+
+
 // Перевод из даты в UNIX time
 time_t date_to_time(date *d)
 {
@@ -52,7 +171,7 @@ time_t date_to_time(date *d)
 }
 
 // Перевод из UNIX time в дату
-void time_to_date(time_t t, date *entry)
+/*void time_to_date(time_t t, date *entry)
 {
    struct tm *timeInfo;
    timeInfo = localtime(&t);
@@ -60,7 +179,7 @@ void time_to_date(time_t t, date *entry)
    entry->day = timeInfo->tm_mday-1;
    entry->month = timeInfo->tm_mon;
    entry->year = timeInfo->tm_year + 1900;
-}
+}*/
 
 // Загрузить записи в оперативную память (все)
 // Они хранятся в виде дерева
@@ -75,20 +194,9 @@ void load_notes()
       {
          char text[100];
 
-         char *p = strtok(line, ":");
-         time_t t = strtoul(p, NULL, 10);
-
-         p = strtok(NULL, ":");
-         strcpy(text, p);
-
-         date e;
-         time_to_date(t, &e);
-
-         strtok(text, "\n");
-
-         years[e.year-2022].months[e.month].amount++;
-         years[e.year-2022].months[e.month].days[e.day].isEmpty = 0;
-         strcpy(years[e.year-2022].months[e.month].days[e.day].note, text);
+         
+         fscanf("%d %d %[^\n]%*c",&m,&d,text);
+         strcpy(months[d].days[d].note, text);
       }
 
       fclose(file);
@@ -101,30 +209,16 @@ void save_notes()
    FILE *file = fopen("notes.txt", "w");
    if (file != NULL)
    {
-      for (int y = 0; y < 5; y++)
-      {
          for (int m = 0; m < 12; m++)
          {
-            int n = days_in_month(2022+y, m);
 
             for (int d = 0; d < n; d++)
             {
-                  if (years[y].months[m].days[d].isEmpty == 0)
+                  if (months[m].days[d].note[0] != 0)
                   {
-                     date entry;
-
-                     entry.day = d;
-                     entry.month = m;
-                     entry.year = y+2022;
-
-                     time_t t = date_to_time(&entry);
-
-                     char out[100];
-                     sprintf(out, "%lld:%s\n", t, years[y].months[m].days[d].note);
-                     fputs(out, file);
+                     fprintf(file, "%d %d %s\n", m,d, months[m].days[d].note);
                   }
             }
-         }
       }
 
       fclose(file);
@@ -193,18 +287,6 @@ void update_month()
  //дни текущего месяца     
 int weekday( int date,int month,int year )
 {
-<<<<<<< Updated upstream
-=======
-   setfillstyle(SOLID_FILL, COLOR(145, 185, 236));
-   settextstyle(COMPLEX_FONT, HORIZ_DIR, 4);
-   bar(CALENDAR_X, CALENDAR_Y, 360, 400);
-   
-}
-
-
-int weekday( int date,int month,int year )
-{
->>>>>>> Stashed changes
    int cnt, dayindex, wdaytab[] = { 6, 0, 1, 2, 3, 4, 5 };
    if( month<3 )
     {
@@ -214,7 +296,6 @@ int weekday( int date,int month,int year )
    cnt = date + ((13 * month - 27) / 5) + year;
    dayindex = (cnt + (year / 4) - (year / 100) + (year / 400)) % 7;
    return wdaytab[ dayindex ];
-<<<<<<< Updated upstream
 }
 
  //дни прошлого месяца   (последняя неделя)
@@ -224,13 +305,13 @@ int weekday( int date,int month,int year )
 
 
 //Нарисовать числа с привязкой к дням недели
-void draw_weekdays( int wday)
+void draw_weekdays(int wday)
 {
    setfillstyle(SOLID_FILL, COLOR(145, 185, 236));
    settextstyle(COMPLEX_FONT, HORIZ_DIR, 4);
    bar(CALENDAR_X, CALENDAR_Y, 360, 400);
    
-   if (wday == 4 || wday==5){
+   if (wday == 4 || wday == 5){
       putimage(50, 50, images[IMG_WEEKENDS], 0);
    }
    else {
@@ -240,9 +321,6 @@ void draw_weekdays( int wday)
 
 
 
-=======
- }
->>>>>>> Stashed changes
 
 // Нарисовать дни календаря
 void draw_days(int y, int m)
@@ -302,9 +380,8 @@ void clear_note()
        NOTE_Y);
 }
 
-// Обработчик заметки при нажатии на нее, здесь происходит ввод в поле заметки
-// сохранение, и т.п.
-void hour_handler()
+// Обработчик заметки при нажатии на нее, здесь происходит ввод в поле заметки, сохранение, прекращение редактирования при отмене
+void event_handler()
 {
    settextjustify(LEFT_TEXT, CENTER_TEXT);
    settextstyle(COMPLEX_FONT, HORIZ_DIR, 2);
@@ -346,7 +423,7 @@ void hour_handler()
             }
 
             strcpy(years[curYear-2022].months[curMonth].days[curDay].note, out);
-            putimage(EDIT_X, EDIT_Y, images[IMG_ADAY], 0);
+            putimage(EDIT_X, EDIT_Y, images[IMG_EDIT], 0);
 
             break;
          }
@@ -444,7 +521,7 @@ void calendar_handler()
             curYear--;
          }
       }
-      else if (290 <= x && x <= 320 && 100 <= y && y <= 30)
+      else if (290 <= x && x <= 320 && 100 <= y && y <= 130)
       {
          if (curYear < 2035)
          {
@@ -533,7 +610,7 @@ int main()
         
         if(140 <= x && x <= 220)
         {
-            if(260 <= y && y <= 340)
+            if(380 <= y && y <= 410)
             {
                 calendar_handler();
             }
