@@ -115,7 +115,6 @@ int days_in_month(int year, int month)
 }
 
 
-
 int curYear = 2022;
 int curMonth = 4;
 int curWeekday = 0;
@@ -153,13 +152,15 @@ void unload_images()
 
 
 // Запрос текущей даты
-/*date = tm.tm_mday;
+date = tm.tm_mday;
 month = tm.tm_mon + 1;
-year = tm.tm_year + 1900;*/
+year = tm.tm_year + 1900;
+sprintf( tbuf,"%d %s %d %s", dat, mname[ month ], year, xname[ weekday(dat, month, year) ] );
+
 
 
 // Перевод из даты в UNIX time
-time_t date_to_time(date *d)
+/*time_t date_to_time(date *d)
 {
    struct tm timeInfo = {0};
 
@@ -168,7 +169,7 @@ time_t date_to_time(date *d)
    timeInfo.tm_year = d->year - 1900;
 
    return mktime(&timeInfo);
-}
+}*/
 
 // Перевод из UNIX time в дату
 /*void time_to_date(time_t t, date *entry)
@@ -514,21 +515,7 @@ void calendar_handler()
       int x = mousex();
       int y = mousey();
 
-      if (40 <= x && x <= 70 && 100 <= y && y <= 130)
-      {
-         if (2022 < curYear)
-         {
-            curYear--;
-         }
-      }
-      else if (290 <= x && x <= 320 && 100 <= y && y <= 130)
-      {
-         if (curYear < 2035)
-         {
-            curYear++;
-         }
-      }
-      else if (40  <= x && x <= 70 && 60 <= y && y <= 90)
+      if (50  <= x && x <= 70 && 60 <= y && y <= 90)
       {
          if (!(curYear == 2022 && curMonth == 0))
          {
@@ -541,7 +528,7 @@ void calendar_handler()
             }
          }
       }
-      else if (290 <= x && x <= 320 && 60 <= y && y <= 90)
+      else if (290 <= x && x <= 310 && 60 <= y && y <= 90)
       {
          if (!(curYear == 2036 && curMonth == 11))
          {
