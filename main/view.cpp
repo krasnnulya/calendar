@@ -193,6 +193,18 @@ void update_month()
  //дни текущего мес€ца     
 int weekday( int date,int month,int year )
 {
+<<<<<<< Updated upstream
+=======
+   setfillstyle(SOLID_FILL, COLOR(145, 185, 236));
+   settextstyle(COMPLEX_FONT, HORIZ_DIR, 4);
+   bar(CALENDAR_X, CALENDAR_Y, 360, 400);
+   
+}
+
+
+int weekday( int date,int month,int year )
+{
+>>>>>>> Stashed changes
    int cnt, dayindex, wdaytab[] = { 6, 0, 1, 2, 3, 4, 5 };
    if( month<3 )
     {
@@ -202,6 +214,7 @@ int weekday( int date,int month,int year )
    cnt = date + ((13 * month - 27) / 5) + year;
    dayindex = (cnt + (year / 4) - (year / 100) + (year / 400)) % 7;
    return wdaytab[ dayindex ];
+<<<<<<< Updated upstream
 }
 
  //дни прошлого мес€ца   (последн€€ недел€)
@@ -227,6 +240,9 @@ void draw_weekdays( int wday)
 
 
 
+=======
+ }
+>>>>>>> Stashed changes
 
 // Ќарисовать дни календар€
 void draw_days(int y, int m)
