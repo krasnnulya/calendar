@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include<graphics.h>
+#include "graphics.h"
 
 // Макросы определяют положения объектов
 // Чтобы не вводить каждый раз вручную
@@ -41,89 +41,57 @@
 IMAGE *images[9];
 
 // Индексы в массиве
-enum IMAGE_INDEX
-{
-   IMG_ADAY,
-   IMG_BACKGROUND,
-   IMG_DATA,
-   IMG_EDAY,
-   IMG_NDAY,
-   IMG_WEEKENDS,
-   IMG_ABOUT,
-   IMG_EDIT,
-   IMG_THESE
-};
-
-// Структура для даты (удобно)
-/*typedef struct date
-{
-   int year;
-   int month;
-   int weekday;
-   int day;
-} date; */
+enum IMAGE_INDEX{  IMG_ADAY,  IMG_BACKGROUND,   IMG_DATA,
+   IMG_EDAY,   IMG_NDAY,   IMG_WEEKENDS,   IMG_ABOUT,   IMG_EDIT,
+   IMG_THESE};
 
 int date, d;
-
-typedef struct day
-{
-   char note[NOTE_SIZE];
-} day;
-
-
-typedef struct month
-{
-   int amount; // кол-во записей на день, если > 0 то ставится зеленая меткa
-   day days[31];
-} month;
-
-typedef struct year
-{
-   int amount; // кол-во записей на день, если > 0 то ставится зеленая метка
-   month months[12];
-} year;
-
-year years[5]; // Массив-дерево
-
-// Кол-во дней в месяцах (невисокосных)
-const int dim[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-const char *mts[12] = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
- 
-
-// Является ли год високосным?
-int is_leap_year(int year)
-
-{
-   if (year % 4 == 0)
-      return 1;
-
-   if (year % 100 == 0)
-      return 0;
-
-   if (year % 400 == 0)
-      return 1;
-
-   return false;
-}
-
-// Количество дней в месяце
-int days_in_month(int year, int month)
-{
-   if (is_leap_year(year) && month == 1)
-      return 29;
-   else return dim[month];
-}
-
-
 int curYear = 2022;
 int curMonth = 4;
 int curWeekday = 0;
 int curDay = 0;
 int curPage = 0;
 
-// Загрузка изображений
-void load_images()
+typedef struct day{
+   char note[NOTE_SIZE];
+} day;
+
+typedef struct month {
+   int amount; // кол-во записей на день, если > 0 то ставится зеленая меткa
+   day days[31];
+} month;
+
+// на несколько лет????!!!
+typedef struct year{
+   int amount; // кол-во записей на день, если > 0 то ставится зеленая метка
+   month months[12];
+} year;
+
+month months[12]; //???
+
+year years[5]; // Массив-дерево
+
+// Кол-во дней в месяцах (невисокосных)
+const int dim[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const char *mts[12] = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
+
+// Является ли год високосным?
+int is_leap_year(int year1)
 {
+   if (year1 % 4 == 0)   return 1;
+   if (year1 % 100 == 0) return 0;
+   if (year1 % 400 == 0)   return 1;
+   return 0;
+}
+
+// Количество дней в месяце
+int days_in_month(int year1, int month1) {
+   if (is_leap_year(year1) && month1 == 1)  return 29;
+   else return dim[month1];
+}
+
+// Загрузка изображений
+void load_images() {
    images[IMG_ADAY] = loadBMP("another_day.bmp");
    images[IMG_BACKGROUND] = loadBMP("background.bmp");
    images[IMG_DATA] = loadBMP("date_ok.bmp");
@@ -136,8 +104,7 @@ void load_images()
 }
 
 // Выгрузка изображений
-void unload_images()
-{
+void unload_images() {
    free(images[IMG_ADAY]);
    free(images[IMG_BACKGROUND]);
    free(images[IMG_DATA]);
@@ -147,21 +114,10 @@ void unload_images()
    free(images[IMG_ABOUT]);
    free(images[IMG_EDIT]);
    free(images[IMG_THESE]);
-
 }
 
-
-// Запрос текущей даты
-date = tm.tm_mday;
-month = tm.tm_mon + 1;
-year = tm.tm_year + 1900;
-sprintf( tbuf,"%d %s %d %s", dat, mname[ month ], year, xname[ weekday(dat, month, year) ] );
-
-
-
 // Перевод из даты в UNIX time
-/*time_t date_to_time(date *d)
-{
+time_t  date_to_time(date *d){
    struct tm timeInfo = {0};
 
    timeInfo.tm_mday = d->day+1;
@@ -169,7 +125,7 @@ sprintf( tbuf,"%d %s %d %s", dat, mname[ month ], year, xname[ weekday(dat, mont
    timeInfo.tm_year = d->year - 1900;
 
    return mktime(&timeInfo);
-}*/
+}
 
 // Перевод из UNIX time в дату
 /*void time_to_date(time_t t, date *entry)
@@ -187,16 +143,15 @@ sprintf( tbuf,"%d %s %d %s", dat, mname[ month ], year, xname[ weekday(dat, mont
 void load_notes()
 {
    FILE *file = fopen("notes.txt", "r+");
+   int m, d;
    if (file != NULL)
    {
       char line[100];
 
       while (fgets(line, 100, file))
       {
-         char text[100];
-
-         
-         fscanf("%d %d %[^\n]%*c",&m,&d,text);
+         char text[100];         
+         sscanf(line, "%d %d %s", &m, &d, text);
          strcpy(months[d].days[d].note, text);
       }
 
@@ -207,6 +162,7 @@ void load_notes()
 // Сохранить записи на файл
 void save_notes()
 {
+   int n;
    FILE *file = fopen("notes.txt", "w");
    if (file != NULL)
    {
@@ -286,16 +242,15 @@ void update_month()
 }
 
  //дни текущего месяца     
-int weekday( int date,int month,int year )
+int weekday( int date,int month1,int year1)
 {
    int cnt, dayindex, wdaytab[] = { 6, 0, 1, 2, 3, 4, 5 };
-   if( month<3 )
-    {
-       month+=12;
-       year--;
+   if( month1<3 ){
+       month1+=12;
+       year1--;
     }
-   cnt = date + ((13 * month - 27) / 5) + year;
-   dayindex = (cnt + (year / 4) - (year / 100) + (year / 400)) % 7;
+   cnt = date + ((13 * month1 - 27) / 5) + year1;
+   dayindex = (cnt + (year1 / 4) - (year1 / 100) + (year1 / 400)) % 7;
    return wdaytab[ dayindex ];
 }
 
@@ -515,7 +470,21 @@ void calendar_handler()
       int x = mousex();
       int y = mousey();
 
-      if (50  <= x && x <= 70 && 60 <= y && y <= 90)
+      if (40 <= x && x <= 70 && 100 <= y && y <= 130)
+      {
+         if (2022 < curYear)
+         {
+            curYear--;
+         }
+      }
+      else if (290 <= x && x <= 320 && 100 <= y && y <= 130)
+      {
+         if (curYear < 2035)
+         {
+            curYear++;
+         }
+      }
+      else if (40  <= x && x <= 70 && 60 <= y && y <= 90)
       {
          if (!(curYear == 2022 && curMonth == 0))
          {
@@ -528,7 +497,7 @@ void calendar_handler()
             }
          }
       }
-      else if (290 <= x && x <= 310 && 60 <= y && y <= 90)
+      else if (290 <= x && x <= 320 && 60 <= y && y <= 90)
       {
          if (!(curYear == 2036 && curMonth == 11))
          {
