@@ -47,7 +47,7 @@ enum IMAGE_INDEX{  IMG_ADAY,  IMG_BACKGROUND,   IMG_DATA,
 
 int date, d;
 int curYear = 2022;
-int curMonth = 4;
+int curMonth = 5;
 int curWeekday = 0;
 int curDay = 0;
 int curPage = 0;
@@ -117,7 +117,7 @@ void unload_images() {
 }
 
 // Перевод из даты в UNIX time
-time_t  date_to_time(date *d){
+/*time_t  date_to_time(date *d){
    struct tm timeInfo = {0};
 
    timeInfo.tm_mday = d->day+1;
@@ -125,7 +125,7 @@ time_t  date_to_time(date *d){
    timeInfo.tm_year = d->year - 1900;
 
    return mktime(&timeInfo);
-}
+}/*
 
 // Перевод из UNIX time в дату
 /*void time_to_date(time_t t, date *entry)

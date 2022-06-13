@@ -44,7 +44,6 @@ curYear : int #<view.cpp>
 d : int #<view.cpp>
 date : int #<view.cpp>
 date _type_ #<header.h>
-date_to_time(date* d) -> time_t #<view.cpp>
 day _type_ #<header.h>
 day_handler() -> void #<view.cpp>
 days_in_month(int year, int month) -> int #<header.h>
