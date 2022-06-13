@@ -52,8 +52,10 @@ int curWeekday = 0;
 int curDay = 0;
 int curPage = 0;
 
+
 typedef struct day{
    char note[NOTE_SIZE];
+   int isEmpty=0;
 } day;
 
 typedef struct month {
