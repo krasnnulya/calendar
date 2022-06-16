@@ -119,7 +119,7 @@ void unload_images() {
 }
 
 // Перевод из даты в UNIX time
-/*time_t  date_to_time(date *d){
+/*void time_t  date_to_time(date *d){
    struct tm timeInfo = {0};
 
    timeInfo.tm_mday = d->day+1;
@@ -127,7 +127,7 @@ void unload_images() {
    timeInfo.tm_year = d->year - 1900;
 
    return mktime(&timeInfo);
-}/*
+}*/
 
 // Перевод из UNIX time в дату
 /*void time_to_date(time_t t, date *entry)
