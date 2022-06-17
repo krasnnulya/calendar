@@ -520,6 +520,13 @@ void calendar_handler()
             }
          }
       }
+      else if(is_days_clicked(x, y))
+      {
+          day_handler();
+      }
+       else continue;
+
+       calendar_update();
    }
 }
 
