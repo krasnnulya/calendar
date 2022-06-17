@@ -31,34 +31,34 @@ return wdaytab[ dayindex ];
  
 int main(void)
  {
-int i, j, p, pday, today, q, dat, month, year, prevmonth, prevyear;
+   int i, j, p, pday, today, q, dat, month, year, prevmonth, prevyear;
+    
+   char tbuf[ 81 ];
+   const char *wname[] = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс" };
+   const char *xname[] =
+    {
+    "Понедельник","Вторник","Среда","Четверг",
+    "Пятница","Суббота","Воскресенье"
+    };
+    
+   const char *mname[]=
+    {
+    "*", "Января", "Февраля", "Марта", "Апреля",
+    "Мая", "Июня", "Июля", "Августя",
+    "Сентября", "Октября", "Ноября", "Декабря"
+    };
  
-char tbuf[ 81 ];
-const char *wname[] = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс" };
-const char *xname[] =
- {
- "Понедельник","Вторник","Среда","Четверг",
- "Пятница","Суббота","Воскресенье"
- };
- 
-const char *mname[]=
- {
- "*", "Января", "Февраля", "Марта", "Апреля",
- "Мая", "Июня", "Июля", "Августя",
- "Сентября", "Октября", "Ноября", "Декабря"
- };
- 
-time_t t = time(NULL);
-struct tm tm = *localtime( &t );
+   time_t t = time(NULL);
+   struct tm tm = *localtime( &t );
  
  
-// Запрос текущей даты
-dat = tm.tm_mday;
-month = tm.tm_mon + 1;
-year = tm.tm_year + 1900;
+   // Запрос текущей даты
+   dat = tm.tm_mday;
+   month = tm.tm_mon + 1;
+   year = tm.tm_year + 1900;
  
-sprintf( tbuf,"%d %s %d %s", dat, mname[ month ], year, xname[ weekday(dat, month, year) ] );
-printf( "%36s\n", tbuf );
+   sprintf( tbuf,"%d %s %d %s", dat, mname[ month ], year, xname[ weekday(dat, month, year) ] );
+   printf( "%36s\n", tbuf );
  
 // Печать дней недели
 j = -1;
@@ -122,7 +122,6 @@ do
  } while( !((i==0) && (p>getmaxdays( month, year))) );
 printf( "------------------------------------\n" );
 printf( "* - сегодняшняя дата\n" );
-printf( "Нажмите ENTER...\n" );
 getchar();
 return 0;
 }

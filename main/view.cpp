@@ -24,16 +24,16 @@
 #define TIME_Y 110
 #define TIME_H 107
 
-#define NOTE_X 474
-#define NOTE_Y 52
-#define NOTE_W 765
-#define NOTE_H 106
+#define NOTE_X 50
+#define NOTE_Y 600
+#define NOTE_W 220
+#define NOTE_H 40
 
-#define NOTE_TEXT_X 25
-#define NOTE_TEXT_Y 590
+#define NOTE_TEXT_X 50
+#define NOTE_TEXT_Y 610
 
 #define EDIT_X 280
-#define EDIT_Y 550
+#define EDIT_Y 600
 
 #define NOTE_SIZE 50
 
@@ -45,16 +45,44 @@ enum IMAGE_INDEX{  IMG_ADAY,  IMG_BACKGROUND,   IMG_DATA,
    IMG_EDAY,   IMG_NDAY,   IMG_WEEKENDS,   IMG_ABOUT,   IMG_EDIT,
    IMG_THESE};
    
-int tm_mday;	//День месяца - [1,31]
-int tm_mon;	//Месяцы после января - [0,11]
-int tm_year;	//Года с 1900
-int tm_wday;      //Дни с воскресенья - [0,6]
+// Запрос текущей даты
+/*dat = tm.tm_mday;
+weekday = tm.tm_wday+1;
+month = tm.tm_mon + 1;
+year = tm.tm_year + 1900;*/
 
+// возвращает число дней в месяце
+int getmaxdays( int month,int year )
+ {
+int maxdays[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }, n;
+if( month != 2 ) return maxdays[ month ];
+n=28;
+if( (year % 4)==0 )   n++;
+if( (year % 100)==0 ) n--;
+if( (year % 400)==0 ) n++;
+return n;
+ }
+
+// возвращает день недели (0-понедельник, 6-воскресенье)
+int weekday( int dat,int month,int year )
+ {
+int cnt, dayindex, wdaytab[] = { 6, 0, 1, 2, 3, 4, 5 };
+if( month<3 )
+ {
+ month+=12;
+ year--;
+ }
+cnt = dat + ((13 * month - 27) / 5) + year;
+dayindex = (cnt + (year / 4) - (year / 100) + (year / 400)) % 7;
+return wdaytab[ dayindex ];
+ }
+  
+   
 int date, d;
-int curYear = tm_year;
-int curMonth = tm_mon;
-int curWeekday = tm_wday;
-int curDay = tm_mday;
+int curYear = 2022;
+int curMonth =5;
+int curWeekday = 0;
+int curDay = 0;
 int curPage = 0;
 
 
@@ -123,27 +151,6 @@ void unload_images() {
    free(images[IMG_THESE]);
 }
 
-// Перевод из даты в UNIX time
-/*void time_t  date_to_time(date *d){
-   struct tm timeInfo = {0};
-
-   timeInfo.tm_mday = d->day+1;
-   timeInfo.tm_mon = d->month;
-   timeInfo.tm_year = d->year - 1900;
-
-   return mktime(&timeInfo);
-}*/
-
-// Перевод из UNIX time в дату
-/*void time_to_date(time_t t, date *entry)
-{
-   struct tm *timeInfo;
-   timeInfo = localtime(&t);
-
-   entry->day = timeInfo->tm_mday-1;
-   entry->month = timeInfo->tm_mon;
-   entry->year = timeInfo->tm_year + 1900;
-}*/
 
 // Загрузить записи в оперативную память (все)
 // Они хранятся в виде дерева
@@ -208,13 +215,6 @@ const char *month_str(int m)
    return mts[m];
 }
 
-// Получаем название недели по номеру
-//const char *weekday_str(int wd)
-//{
-  // return wname[wd];
-//}
-
-
 // Очистить поле текущего месяца
 void clear_month()
 {
@@ -249,7 +249,7 @@ void update_month()
 }
 
  //дни текущего месяца     
-int weekday( int date,int month1,int year1)
+/*int weekday( int date,int month1,int year1)
 {
    int cnt, dayindex, wdaytab[] = { 6, 0, 1, 2, 3, 4, 5 };
    if( month1<3 ){
@@ -259,7 +259,7 @@ int weekday( int date,int month1,int year1)
    cnt = date + ((13 * month1 - 27) / 5) + year1;
    dayindex = (cnt + (year1 / 4) - (year1 / 100) + (year1 / 400)) % 7;
    return wdaytab[ dayindex ];
-}
+}*/
 
  //дни прошлого месяца   (последняя неделя)
 
@@ -281,7 +281,6 @@ void draw_weekdays(int wday)
       putimage(50, 50, images[IMG_THESE], 0);
    }   
 }
-
 
 
 
@@ -309,29 +308,29 @@ void draw_days(int y, int m)
 // Проверить, нажаты ли дни календаря
 int is_days_clicked(int x, int y)
 {
-   if (x >= DAYS_OFFSET_X && y >= DAYS_OFFSET_Y)
-   {
-      int ux = x-DAYS_OFFSET_X;
-      int uy = y-DAYS_OFFSET_Y;
+    if (x >= DAYS_OFFSET_X && y >= DAYS_OFFSET_Y)
+    {
+       int ux = x-DAYS_OFFSET_X;
+       int uy = y-DAYS_OFFSET_Y;
 
-      int dayX = ux/47;
-      int dayY = uy/47;
+       int dayX = ux/47;
+       int dayY = uy/47;
 
-      int n = days_in_month(curYear, curMonth);
-      int t = dayY*10+dayX;
+       int n = days_in_month(curYear, curMonth);
+       int t = dayY*10+dayX;
 
-      if (t < n)
-      {
-         if (ux <= dayX*47+100 && uy <= dayY*47+100)
-         {
-            curDay = t;
-            return 1;
-         }
-      }
+       if (t < n)
+       {
+          if (ux <= dayX*47+100 && uy <= dayY*47+100)
+          {
+             curDay = t;
+             return 1;
+          } 
+       }
+    }
+
+    return 0;
    }
-
-   return 0;
-}
 
 
 // Очистить поле заметки на экране
@@ -340,7 +339,7 @@ void clear_note()
    bar(NOTE_X,
        NOTE_Y,
        NOTE_X+NOTE_W,
-       NOTE_Y);
+       NOTE_Y+NOTE_H);
 }
 
 // Обработчик заметки при нажатии на нее, здесь происходит ввод в поле заметки, сохранение, прекращение редактирования при отмене
@@ -478,23 +477,9 @@ void calendar_handler()
       int x = mousex();
       int y = mousey();
 
-      if (40 <= x && x <= 70 && 100 <= y && y <= 130)
+      if (40  <= x && x <= 70 && 60 <= y && y <= 90)
       {
-         if (0 < curYear)
-         {
-            curYear--;
-         }
-      }
-      else if (290 <= x && x <= 320 && 100 <= y && y <= 130)
-      {
-         if (curYear < 13)
-         {
-            curYear++;
-         }
-      }
-      else if (40  <= x && x <= 70 && 60 <= y && y <= 90)
-      {
-         if (!(curYear == 0 && curMonth == 0))
+         if (!(curYear == 2022 && curMonth == 0))
          {
             curMonth--;
             if (curMonth < 0)
@@ -507,7 +492,7 @@ void calendar_handler()
       }
       else if (290 <= x && x <= 320 && 60 <= y && y <= 90)
       {
-         if (!(curYear == 13 && curMonth == 11))
+         if (!(curYear == 2036 && curMonth == 11))
          {
             curMonth++;
             if (curMonth > 11)
@@ -522,7 +507,6 @@ void calendar_handler()
       {
          day_handler();
       }
-      else continue;
    }
 }
 
