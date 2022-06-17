@@ -45,7 +45,6 @@ d : int #<view.cpp>
 date : int #<view.cpp>
 date _type_ #<header.h>
 day _type_ #<header.h>
-day_handler() -> void #<view.cpp>
 days_in_month(int year, int month) -> int #<header.h>
 days_in_month(int year1, int month1) -> int #<view.cpp>
 dim : const int[] #<header.h>

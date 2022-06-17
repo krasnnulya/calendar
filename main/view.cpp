@@ -434,33 +434,6 @@ void event_handler()
    }
 }
 
-// Обработчик дня
-void day_handler()
-{
-    while (1)
-    {
-       while (mousebuttons() == 0);
-       while (mousebuttons() != 0);
-
-       int x = mousex();
-       int y = mousey();
-
-       if (25 <= x && x <= 100 && 630 <= y && y <= 700)
-       {
-          break;
-       }
-       else if (320 <= x && x <= 350 && 5 <= y && y <= 50)
-       {
-          save_notes();
-          unload_images();
-          exit(0);
-       }
-       else if(is_days_clicked(x, y))
-       {
-         event_handler();
-       }
-    }
-}
 
 // Обновить календарь
 void calendar_update()
@@ -483,11 +456,12 @@ void calendar_update()
 // Обработчик календаря
 void calendar_handler()
 {
+   
+    calendar_update();
 
-   while (1)
-   {
-      calendar_update();
-      
+    while (1)
+    {
+ 
       while (mousebuttons() == 0);
       while (mousebuttons() != 0);
 
@@ -520,9 +494,19 @@ void calendar_handler()
             }
          }
       }
+       else if (25 <= x && x <= 100 && 630 <= y && y <= 700)
+       {
+          break;
+       }
+       else if (320 <= x && x <= 350 && 5 <= y && y <= 50)
+       {
+          save_notes();
+          unload_images();
+          exit(0);
+       }
       else if(is_days_clicked(x, y))
       {
-          day_handler();
+         event_handler();
       }
        else continue;
 
