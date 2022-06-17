@@ -44,6 +44,11 @@ IMAGE *images[9];
 enum IMAGE_INDEX{  IMG_ADAY,  IMG_BACKGROUND,   IMG_DATA,
    IMG_EDAY,   IMG_NDAY,   IMG_WEEKENDS,   IMG_ABOUT,   IMG_EDIT,
    IMG_THESE};
+   
+int tm_mday;	//ƒень мес€ца - [1,31]
+int tm_mon;	//ћес€цы после €нвар€ - [0,11]
+int tm_year;	//√ода с 1900
+int tm_wday;      //ƒни с воскресень€ - [0,6]
 
 int date, d;
 int curYear = 2022;
@@ -148,12 +153,12 @@ void load_notes()
    int m, d;
    if (file != NULL)
    {
-      char line[100];
+      char text[NOTE_SIZE];
 
-      while (fgets(line, 100, file))
+       while(fscanf(file,"%d:%d%:", &m, &d, text) > 0 && fgets(text, NOTE_SIZE, file) != NULL)
       {
-         char text[100];         
-         sscanf(line, "%d %d %s", &m, &d, text);
+         int n = strlen(text);
+         text[n-1] = '\0'; // убираетс€ \n в конце         
          strcpy(months[d].days[d].note, text);
       }
 
@@ -367,7 +372,7 @@ void event_handler()
       {
          char c = getch();
 
-         if (c == KEY_ENTER)
+         if (c == KEY_ENTER) // сохранить заметку
          {
             if (out[0] != '\0')
             {
@@ -385,16 +390,16 @@ void event_handler()
 
             break;
          }
-         else
+         else // изменить
          {
             clear_note();
 
-            if (c == KEY_BACKSPACE)
+            if (c == KEY_BACKSPACE) // стереть символ
             {
                if (i != 0)
                   out[--i] = '\0';
             }
-            else if (32 <= (unsigned)c)
+            else if (32 <= (unsigned)c) // добавить символ
             {
                if (i != NOTE_SIZE-1)
                   out[i++] = c;

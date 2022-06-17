@@ -67,6 +67,10 @@ month_str(int m) -> const char* #<view.cpp>
 months : month[] #<view.cpp>
 mts : const char*[] #<header.h>
 save_notes() -> void #<view.cpp>
+tm_mday : int #<view.cpp>
+tm_mon : int #<view.cpp>
+tm_wday : int #<view.cpp>
+tm_year : int #<view.cpp>
 unload_images() -> void #<view.cpp>
 update_month() -> void #<view.cpp>
 update_year() -> void #<view.cpp>
