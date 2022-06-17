@@ -358,57 +358,56 @@ void draw_event_day()
 void clear_note()
 {
    bar(NOTE_X,
-       NOTE_Y,
+       NOTE_Y+(curDay)*NOTE_H+curDay*2,
        NOTE_X+NOTE_W,
-       NOTE_Y+NOTE_H);
+       NOTE_Y+(curDay+1)*NOTE_H+curDay*2);
 }
 
-// Обработчик заметки при нажатии на нее, здесь происходит ввод в поле заметки, сохранение, прекращение редактирования при отмене
+// Обработчик заметки при нажатии на нее, 
+//здесь происходит ввод в поле заметки, 
+//сохранение, прекращение редактирования при отмене
 void event_handler()
 {
    settextjustify(LEFT_TEXT, CENTER_TEXT);
    settextstyle(COMPLEX_FONT, HORIZ_DIR, 2);
 
-   putimage(EDIT_X, EDIT_Y, images[IMG_EDIT], 0);
+   putimage(EDIT_X, EDIT_Y+curDay*NOTE_H, images[IMG_EDIT], 0);
 
    int x = NOTE_TEXT_X;
-   int y = NOTE_TEXT_Y;
+   int y = NOTE_TEXT_Y+curDay*NOTE_H;
 
    char out[NOTE_SIZE];
    memset(out, '\0', NOTE_SIZE);
    int i = 0;
-
-   if (years[curYear-2022].months[curMonth].days[curDay].isEmpty == 0)
-   {
-      strcpy(out, years[curYear-2022].months[curMonth].days[curDay].note);
-      i = strlen(out);
-   }
+   
+    int len = strlen(years[curYear].months[curMonth].days[curDay].note);
+    if(len != 0)
+    {
+        strcpy(out, years[curYear].months[curMonth].days[curDay].note);
+        i = len;
+    }
 
    setfillstyle(SOLID_FILL, COLOR(226, 244, 255));
+ 
+   int k = 0;
 
    while (1)
    {
       if (kbhit())
       {
          char c = getch();
-
+         if(c==0) { c=getch(); continue; }
+         
          if (c == KEY_ENTER) // сохранить заметку
          {
-            if (out[0] != '\0')
-            {
-               years[curYear-2022].months[curMonth].days[curDay].isEmpty = 0;
-               years[curYear-2022].months[curMonth].amount++;
-            }
-            else
-            {
-               years[curYear-2022].months[curMonth].days[curDay].isEmpty = 1;
-               years[curYear-2022].months[curMonth].amount--;
-            }
+             // Изменяется кол-во записей на сегодня если в поле что-то есть. Это определяется k
+             years[curYear].months[curMonth].amount += k;
+             k = 0;
 
-            strcpy(years[curYear-2022].months[curMonth].days[curDay].note, out);
-            putimage(EDIT_X, EDIT_Y, images[IMG_EDIT], 0);
+             strcpy(years[curYear].months[curMonth].days[curDay].note, out);
+             putimage(EDIT_X, EDIT_Y+curDay*NOTE_H, images[IMG_EDAY], 0);
 
-            break;
+             break;
          }
          else // изменить
          {
@@ -418,11 +417,15 @@ void event_handler()
             {
                if (i != 0)
                   out[--i] = '\0';
+                  if(i == 0) k = -1;
             }
             else if (32 <= (unsigned)c) // добавить символ
             {
                if (i != NOTE_SIZE-1)
+               {
                   out[i++] = c;
+                  k =1;
+               }
             }
 
             outtextxy(x, y, out);
@@ -434,36 +437,29 @@ void event_handler()
 // Обработчик дня
 void day_handler()
 {
+    while (1)
+    {
+       while (mousebuttons() == 0);
+       while (mousebuttons() != 0);
 
-   while (1)
-   {
-      while (mousebuttons() == 0);
-      while (mousebuttons() != 0);
+       int x = mousex();
+       int y = mousey();
 
-      int x = mousex();
-      int y = mousey();
-
-      if (114 <= x && x <= 308 && 72 <= y && y <= 140)
-      {
-         break;
-      }
-      else if (114 <= x && x <= 308 && 174 <= y && y <= 240)
-      {
-         save_notes();
-         unload_images();
-         exit(0);
-      }
-      else if (114 <= x && x <= 308 && 498 <= y && y <= 565)
-      {
-         if (curPage > 0)
-            curPage--;
-      }
-      else if (114 <= x && x <= 308 && 586 <= y && y <= 653)
-      {
-         if (curPage < 3)
-            curPage++;
-      }
-   }
+       if (25 <= x && x <= 100 && 630 <= y && y <= 700)
+       {
+          break;
+       }
+       else if (320 <= x && x <= 350 && 5 <= y && y <= 50)
+       {
+          save_notes();
+          unload_images();
+          exit(0);
+       }
+       else if(is_days_clicked(x, y))
+       {
+         event_handler();
+       }
+    }
 }
 
 // Обновить календарь
@@ -523,10 +519,6 @@ void calendar_handler()
                update_year();
             }
          }
-      }
-      else if (is_days_clicked(x, y))
-      {
-         day_handler();
       }
    }
 }
