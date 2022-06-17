@@ -51,10 +51,10 @@ int tm_year;	//Года с 1900
 int tm_wday;      //Дни с воскресенья - [0,6]
 
 int date, d;
-int curYear = 2022;
-int curMonth = 5;
-int curWeekday = 0;
-int curDay = 0;
+int curYear = tm_year;
+int curMonth = tm_mon;
+int curWeekday = tm_wday;
+int curDay = tm_mday;
 int curPage = 0;
 
 
@@ -467,10 +467,11 @@ void calendar_update()
 // Обработчик календаря
 void calendar_handler()
 {
-   calendar_update();
 
    while (1)
    {
+      calendar_update();
+      
       while (mousebuttons() == 0);
       while (mousebuttons() != 0);
 
@@ -479,21 +480,21 @@ void calendar_handler()
 
       if (40 <= x && x <= 70 && 100 <= y && y <= 130)
       {
-         if (2022 < curYear)
+         if (0 < curYear)
          {
             curYear--;
          }
       }
       else if (290 <= x && x <= 320 && 100 <= y && y <= 130)
       {
-         if (curYear < 2035)
+         if (curYear < 13)
          {
             curYear++;
          }
       }
       else if (40  <= x && x <= 70 && 60 <= y && y <= 90)
       {
-         if (!(curYear == 2022 && curMonth == 0))
+         if (!(curYear == 0 && curMonth == 0))
          {
             curMonth--;
             if (curMonth < 0)
@@ -506,7 +507,7 @@ void calendar_handler()
       }
       else if (290 <= x && x <= 320 && 60 <= y && y <= 90)
       {
-         if (!(curYear == 2036 && curMonth == 11))
+         if (!(curYear == 13 && curMonth == 11))
          {
             curMonth++;
             if (curMonth > 11)
@@ -521,6 +522,7 @@ void calendar_handler()
       {
          day_handler();
       }
+      else continue;
    }
 }
 
