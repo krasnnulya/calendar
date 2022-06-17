@@ -50,6 +50,7 @@ days_in_month(int year, int month) -> int #<header.h>
 days_in_month(int year1, int month1) -> int #<view.cpp>
 dim : const int[] #<header.h>
 draw_days(int y, int m) -> void #<view.cpp>
+draw_event_day() -> void #<view.cpp>
 draw_weekdays(int wday) -> void #<view.cpp>
 event_handler() -> void #<view.cpp>
 getmaxdays(int month, int year) -> int #<calendar.cpp>

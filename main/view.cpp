@@ -332,6 +332,27 @@ int is_days_clicked(int x, int y)
     return 0;
    }
 
+// Заметки по дням
+void draw_event_day()
+{
+    settextstyle(BOLD_FONT, HORIZ_DIR, 2);
+
+    for(int j = 0; j < 31; j++)
+    {
+        int d = curPage+j;
+
+        settextjustify(CENTER_TEXT, CENTER_TEXT);
+
+        if(strlen(years[curYear].months[curMonth].days[curDay].note) != 0)
+        {
+            int x = NOTE_TEXT_X;
+            int y = NOTE_TEXT_Y+NOTE_H*j;
+
+            settextjustify(LEFT_TEXT, CENTER_TEXT);
+            outtextxy(x, y, years[curYear].months[curMonth].days[curDay].note);
+        }
+    }
+}
 
 // Очистить поле заметки на экране
 void clear_note()
