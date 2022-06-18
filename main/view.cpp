@@ -14,8 +14,8 @@
 #define DAYS_OFFSET_X 25
 #define DAYS_OFFSET_Y 200
 
-#define PLANS_OFFSET_X 20
-#define PLANS_OFFSET_Y 190
+#define PLANS_OFFSET_X 40
+#define PLANS_OFFSET_Y 160
 
 #define CALENDAR_X 50
 #define CALENDAR_Y 230
@@ -41,11 +41,6 @@ enum IMAGE_INDEX{  IMG_ADAY,  IMG_BACKGROUND,   IMG_DATA,
    IMG_EDAY,   IMG_NDAY,   IMG_WEEKENDS,   IMG_ABOUT,   IMG_EDIT,
    IMG_THESE};
    
-// Запрос текущей даты
-/*dat = tm.tm_mday;
-weekday = tm.tm_wday+1;
-month = tm.tm_mon + 1;
-year = tm.tm_year + 1900;*/
 
 // возвращает число дней в месяце
 int getmaxdays( int month,int year )
@@ -83,19 +78,20 @@ int curPage = 0;
 
 
 typedef struct day{
-   char note[NOTE_SIZE];
-   int isEmpty=0;
+    char note[NOTE_SIZE];
+    int isEmpty;
+    int amount;
 } day;
 
 typedef struct month {
-   int amount; // кол-во записей на день, если > 0 то ставится зеленая меткa
-   day days[31];
+    int amount; // кол-во записей на день, если > 0 то ставится зеленая меткa
+    day days[31];
 } month;
 
 // на несколько лет????!!!
 typedef struct year{
-   int amount; // кол-во записей на день, если > 0 то ставится зеленая метка
-   month months[12];
+    int amount; // кол-во записей на день, если > 0 то ставится зеленая метка
+    month months[12];
 } year;
 
 month months[12]; //???
@@ -153,13 +149,14 @@ void unload_images() {
 void load_notes()
 {
    FILE *file = fopen("notes.txt", "r+");
-   int m, d;
    if (file != NULL)
    {
-      char text[NOTE_SIZE];
+       char text[NOTE_SIZE];
+       int m, d;
 
        while(fscanf(file,"%d:%d%:", &m, &d, text) > 0 && fgets(text, NOTE_SIZE, file) != NULL)
       {
+         months[m].days[d].amount++;
          int n = strlen(text);
          text[n-1] = '\0'; // убирается \n в конце         
          strcpy(months[d].days[d].note, text);
@@ -201,6 +198,11 @@ void init()
       {
          int n = days_in_month(2022+y, m);
          years[y].months[m].amount = n;
+         for(int d = 0; d < n; d++)
+         {
+             years[y].months[m].days[d].amount = 0;
+             years[y].months[m].days[d].note[0] = '\0';
+         }
       }
    }
 }
@@ -278,7 +280,58 @@ void draw_weekdays(int wday)
    }   
 }
 
-
+// Нарисовать дни календаря
+/*void draw_days(int y, int m)
+{
+    setfillstyle(SOLID_FILL, COLOR(145, 185, 236));
+    bar(CALENDAR_X, CALENDAR_Y, 360, 400);
+   
+    int i, j, p, pday,  dat1, month1,  year1, today;
+   
+    char tbuf[ 81 ];
+    const char *wname[] = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс" };
+    const char *xname[] =
+    {
+    "Понедельник","Вторник","Среда","Четверг",
+    "Пятница","Суббота","Воскресенье"
+    };
+    
+    const char *mname[]=
+    {
+    "*", "Января", "Февраля", "Марта", "Апреля",
+    "Мая", "Июня", "Июля", "Августя",
+    "Сентября", "Октября", "Ноября", "Декабря"
+    };
+ 
+    //Запрос текущей даты
+    dat1 = tm.tm_mday;
+   // weekday1 = tm.tm_wday+1;
+    month1 = tm.tm_mon + 1;
+    year1 = tm.tm_year + 1900;
+    
+    
+    time_t t = time(NULL);
+    struct tm tm = *localtime( &t );
+    
+    if( p==dat 1)
+    {
+    today = 1;
+    }
+ 
+    outtextxy( tbuf, "%s%d", (today) ? "*" : "", pday );
+    outtextxy( "%5s", (pday<0) ? " " : tbuf );
+ 
+    today = 0;
+    p++;
+    i++;
+    if( i==7 )
+    {
+    i=0;
+    j++;
+    }
+    } while( !((i==0) && (p>getmaxdays( month1, year1))) );
+}
+*/
 
 // Нарисовать дни календаря
 void draw_days(int y, int m)
@@ -288,17 +341,21 @@ void draw_days(int y, int m)
 
    int n = days_in_month(curYear, curMonth);
 
-   for (int i = 0; i < n; i++)
-   {
-      int dx = 47*(i%7);
-      int dy = 47*(i/7);
+    for (int i = 0; i < n; i++)
+    {
+       int dx = 47*(i%7);
+       int dy = 47*(i/7);
 
-      putimage(DAYS_OFFSET_X+dx-10, DAYS_OFFSET_Y+dy-25, images[IMG_ADAY], 0);
+       putimage(DAYS_OFFSET_X+dx-10, DAYS_OFFSET_Y+dy-25, images[IMG_ADAY], 0);
       
-      char num[5];
-      sprintf(num, "%d", i+1);
-      outtextxy(DAYS_OFFSET_X+dx+20, DAYS_OFFSET_Y+dy+5, num);
-   }
+      
+       if(months[m].days[i].amount != 0)
+          putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0);
+      
+       char num[5];
+       sprintf(num, "%d", i+1);
+       outtextxy(DAYS_OFFSET_X+dx+20, DAYS_OFFSET_Y+dy+5, num);
+    }
 }
 
 // Проверить, нажаты ли дни календаря
@@ -381,7 +438,6 @@ void event_handler()
              k = 0;
 
              strcpy(years[curYear].months[curMonth].days[d].note, out);
-             putimage(EDIT_X, EDIT_Y+curDay*NOTE_H, images[IMG_EDAY], 0);
 
              break;
           }

@@ -81,6 +81,7 @@ years : year[] #<header.h>
 	date::day : int #<header.h>
 	day::isEmpty : int #<view.cpp>
 	day::note : char[] #<view.cpp>
+	day::amount : int #<view.cpp>
 	month::amount : int #<view.cpp>
 	month::days : day[] #<view.cpp>
 	year::amount : int #<view.cpp>
