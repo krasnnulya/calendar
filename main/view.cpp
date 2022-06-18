@@ -20,10 +20,6 @@
 #define CALENDAR_X 50
 #define CALENDAR_Y 230
 
-#define TIME_X 435
-#define TIME_Y 110
-#define TIME_H 107
-
 #define NOTE_X 50
 #define NOTE_Y 600
 #define NOTE_W 220
@@ -35,7 +31,7 @@
 #define EDIT_X 280
 #define EDIT_Y 600
 
-#define NOTE_SIZE 50
+#define NOTE_SIZE 24
 
 // Изображения
 IMAGE *images[9];
@@ -332,27 +328,6 @@ int is_days_clicked(int x, int y)
     return 0;
    }
 
-// Заметки по дням
-void draw_event_day()
-{
-    settextstyle(BOLD_FONT, HORIZ_DIR, 2);
-
-    for(int j = 0; j < 31; j++)
-    {
-        int d = curPage+j;
-
-        settextjustify(CENTER_TEXT, CENTER_TEXT);
-
-        if(strlen(years[curYear].months[curMonth].days[curDay].note) != 0)
-        {
-            int x = NOTE_TEXT_X;
-            int y = NOTE_TEXT_Y+NOTE_H*j;
-
-            settextjustify(LEFT_TEXT, CENTER_TEXT);
-            outtextxy(x, y, years[curYear].months[curMonth].days[curDay].note);
-        }
-    }
-}
 
 // Очистить поле заметки на экране
 void clear_note()
@@ -368,70 +343,75 @@ void clear_note()
 //сохранение, прекращение редактирования при отмене
 void event_handler()
 {
-   settextjustify(LEFT_TEXT, CENTER_TEXT);
-   settextstyle(COMPLEX_FONT, HORIZ_DIR, 2);
+    settextjustify(LEFT_TEXT, CENTER_TEXT);
+    settextstyle(COMPLEX_FONT, HORIZ_DIR, 2);
 
-   putimage(EDIT_X, EDIT_Y+curDay*NOTE_H, images[IMG_EDIT], 0);
+    putimage(EDIT_X, EDIT_Y, images[IMG_EDIT], 0);
 
-   int x = NOTE_TEXT_X;
-   int y = NOTE_TEXT_Y+curDay*NOTE_H;
+    int x = NOTE_TEXT_X;
+    int y = NOTE_TEXT_Y+curDay*NOTE_H;
 
-   char out[NOTE_SIZE];
-   memset(out, '\0', NOTE_SIZE);
-   int i = 0;
+    char out[NOTE_SIZE];
+    memset(out, '\0', NOTE_SIZE);
+    int i = 0;
    
-    int len = strlen(years[curYear].months[curMonth].days[curDay].note);
+    int d = curPage+curDay;
+    int len = strlen(years[curYear].months[curMonth].days[d].note);
     if(len != 0)
     {
-        strcpy(out, years[curYear].months[curMonth].days[curDay].note);
+        strcpy(out, years[curYear].months[curMonth].days[d].note);
         i = len;
     }
 
-   setfillstyle(SOLID_FILL, COLOR(226, 244, 255));
+    setfillstyle(SOLID_FILL, WHITE); //wdtn
  
-   int k = 0;
+    int k = 0;
 
-   while (1)
-   {
-      if (kbhit())
-      {
-         char c = getch();
-         if(c==0) { c=getch(); continue; }
+    while (1)
+    {
+       if (kbhit())
+       {
+          char c = getch();
+          if(c==0) { c=getch(); continue; }
          
-         if (c == KEY_ENTER) // сохранить заметку
-         {
+          if (c == (200  <= x && x <= 275 && 630 <= y && y <= 700)) // сохранить заметку
+          {
              // Изменяется кол-во записей на сегодня если в поле что-то есть. Это определяется k
              years[curYear].months[curMonth].amount += k;
              k = 0;
 
-             strcpy(years[curYear].months[curMonth].days[curDay].note, out);
+             strcpy(years[curYear].months[curMonth].days[d].note, out);
              putimage(EDIT_X, EDIT_Y+curDay*NOTE_H, images[IMG_EDAY], 0);
 
              break;
-         }
-         else // изменить
-         {
-            clear_note();
+          }
+           else if (25 <= x && x <= 100 && 630 <= y && y <= 700)
+           {
+              break;
+           }
+          else // изменить
+          {
+             clear_note();
 
-            if (c == KEY_BACKSPACE) // стереть символ
-            {
-               if (i != 0)
-                  out[--i] = '\0';
-                  if(i == 0) k = -1;
-            }
-            else if (32 <= (unsigned)c) // добавить символ
-            {
-               if (i != NOTE_SIZE-1)
-               {
-                  out[i++] = c;
-                  k =1;
-               }
-            }
+             if (c == KEY_BACKSPACE) // стереть символ
+             {
+                if (i != 0)
+                   out[--i] = '\0';
+                   if(i == 0) k = -1;
+             }
+             else if (32 <= (unsigned)c) // добавить символ
+             {
+                if (i != NOTE_SIZE-1)
+                {
+                   out[i++] = c;
+                   k =1;
+                }
+             }
 
-            outtextxy(x, y, out);
-         }
-      }
-   }
+             outtextxy(x, y, out);
+          }
+       }
+    }
 }
 
 
@@ -456,7 +436,6 @@ void calendar_update()
 // Обработчик календаря
 void calendar_handler()
 {
-   
     calendar_update();
 
     while (1)
@@ -494,10 +473,7 @@ void calendar_handler()
             }
          }
       }
-       else if (25 <= x && x <= 100 && 630 <= y && y <= 700)
-       {
-          break;
-       }
+
        else if (320 <= x && x <= 350 && 5 <= y && y <= 50)
        {
           save_notes();
@@ -509,8 +485,6 @@ void calendar_handler()
          event_handler();
       }
        else continue;
-
-       calendar_update();
    }
 }
 
