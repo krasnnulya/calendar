@@ -19,7 +19,6 @@ void load_images()
     images[IMG_NOTE] = loadBMP("note.bmp");
     images[IMG_EDAY] = loadBMP("event_day.bmp");
     images[IMG_WEEKENDS] = loadBMP("weekends.bmp");
-    images[IMG_ADAY] = loadBMP("another_day.bmp");
     images[IMG_NDAY] = loadBMP("now_day.bmp");
 }
 
@@ -32,7 +31,6 @@ void unload_images()
     free(images[IMG_NOTE]);
     free(images[IMG_EDAY]);
     free(images[IMG_WEEKENDS]);
-    free(images[IMG_ADAY]);
     free(images[IMG_NDAY]);
 }
 
@@ -174,15 +172,13 @@ void draw_days()
 
     int n = days_in_month(y+2022, m);
     int s = day_of_week();
-    int k = day_prev();
-    int h = day_next();
 
     for(int i = 0; i < n; i++)
     {
         int dx = (DAY_W+DAY_DIST_X)*((i+s)%7);
         int dy = (DAY_H+DAY_DIST_Y)*((i+s)/7);
        
-        if(years[y].months[i].amount != 0)
+        if( years[y].months[m].days[i].note != 0)
           putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); //выделение заметок
         
         if(s == 4 || s == 5)

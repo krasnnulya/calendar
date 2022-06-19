@@ -60,7 +60,7 @@
 
 
 // Изображения
-IMAGE* images[8];
+IMAGE* images[7];
 
 // Индексы в массиве
 enum IMAGE_INDEX
@@ -71,7 +71,6 @@ enum IMAGE_INDEX
     IMG_NOTE,
     IMG_EDAY,
     IMG_WEEKENDS,
-    IMG_ADAY,
     IMG_NDAY
 };
 
