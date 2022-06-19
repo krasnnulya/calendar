@@ -19,7 +19,6 @@ void load_images()
     images[IMG_NOTE] = loadBMP("note.bmp");
     images[IMG_EDAY] = loadBMP("event_day.bmp");
     images[IMG_WEEKENDS] = loadBMP("weekends.bmp");
-    images[IMG_ADAY] = loadBMP("another_day.bmp");
     images[IMG_NDAY] = loadBMP("now_day.bmp");
 }
 
@@ -32,7 +31,6 @@ void unload_images()
     free(images[IMG_NOTE]);
     free(images[IMG_EDAY]);
     free(images[IMG_WEEKENDS]);
-    free(images[IMG_ADAY]);
     free(images[IMG_NDAY]);
 }
 
@@ -146,29 +144,6 @@ int day_of_week()
     return (time.tm_wday + 6) % 7;
 }
 
-//ƒни предыдущего мес€ца
-int day_prev()
-{
-    struct tm time = { 0 };
-    time.tm_year = y+2022 - 1900;
-    time.tm_mon = m-1;
-    time.tm_mday = 1;
-    mktime(&time);
-    return (time.tm_wday + 6) % 7;
-}
-
-
-//ƒни следующего мес€ца
-int day_next()
-{
-    struct tm time = { 0 };
-    time.tm_year = y+2022 - 1900;
-    time.tm_mon = m+1;
-    time.tm_mday = 1;
-    mktime(&time);
-    return (time.tm_wday + 6) % 7;
-}
-
 
 // ќбновить поле текущего года новым значением y
 void update_year()
@@ -194,40 +169,13 @@ void draw_days()
 {
     clear_calendar();
     settextjustify(CENTER_TEXT, CENTER_TEXT);
-
+   
     int n = days_in_month(y+2022, m);
     int s = day_of_week();
-    int k = day_prev();
-    int h = day_next();
 
     for(int i = 0; i < n; i++)
     {
         int dx = (DAY_W+DAY_DIST_X)*((i+s)%7);
         int dy = (DAY_H+DAY_DIST_Y)*((i+s)/7);
        
-        if(years[y].months[i].amount != 0)
-          putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); //выделение заметок
-        
-        if(s == 4 || s == 5)
-          putimage(WDAY_X+dx, WDAY_Y+dy, images[IMG_WEEKENDS], 0); //выделение выходных
-        
-       /* int p;
-        if(p == time.tm_mday)  //выделение текущего дн€
-           {
-            today = 1;
-            putimage(dx, dy, images[IMG_NDAY], 0);
-           }*/
-        for(int prev = 0; prev < n; prev++)
-        {
-          int dx = (DAY_W+DAY_DIST_X)*((prev+k)%7);
-          int dy = (DAY_H+DAY_DIST_Y)*((prev+k)/7);
-        }
-        
-          for(int next = 0; next < n; next++)
-        {
-          int dx = (DAY_W+DAY_DIST_X)*((next+h)%7);
-          int dy = (DAY_H+DAY_DIST_Y)*((next+h)/7);
-        }
-
-        char num[3];
-        sprintf(num, "%d %d %d", i+1, prev-_abracadabra_cast(i);
+        if(_abracadabra_cast(years[y].months[m].days[i]);

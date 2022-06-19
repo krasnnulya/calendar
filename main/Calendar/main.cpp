@@ -169,7 +169,7 @@ void draw_days()
 {
     clear_calendar();
     settextjustify(CENTER_TEXT, CENTER_TEXT);
-
+   
     int n = days_in_month(y+2022, m);
     int s = day_of_week();
 
@@ -178,12 +178,14 @@ void draw_days()
         int dx = (DAY_W+DAY_DIST_X)*((i+s)%7);
         int dy = (DAY_H+DAY_DIST_Y)*((i+s)/7);
        
-        if( years[y].months[m].days[i].note != 0)
-          putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); //выделение заметок
+        if(years[y].months[m].days[i].note != 0) //выделение заметок
+          putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); 
         
-        if(s == 4 || s == 5)
-          putimage(WDAY_X+dx, WDAY_Y+dy, images[IMG_WEEKENDS], 0); //выделение выходных
-        
+        if( i == 4 || i == 5) //выделение выходных
+           /*setfillstyle(SOLID_FILL, COLOR(93, 146, 216));
+           bar(WDAY_X, WDAY_Y, 344, 440); */
+            putimage(WDAY_X, WDAY_Y, images[IMG_WEEKENDS], 0); 
+      
        /* int p;
         if(p == time.tm_mday)  //выделение текущего дня
            {

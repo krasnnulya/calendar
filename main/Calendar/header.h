@@ -52,8 +52,8 @@
 #define WEEK_W 345
 #define WEEK_H 174
 
-#define WDAY_X 250
-#define WDAY_Y 205
+#define WDAY_X 246
+#define WDAY_Y 170
 
 #define PLANS_OFFSET_X 35
 #define PLANS_OFFSET_Y 205
