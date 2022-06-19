@@ -52,13 +52,15 @@
 #define WEEK_W 345
 #define WEEK_H 174
 
+#define WDAY_X 250
+#define WDAY_Y 205
 
-#define PLANS_OFFSET_X 50
-#define PLANS_OFFSET_Y 230
+#define PLANS_OFFSET_X 35
+#define PLANS_OFFSET_Y 205
 
 
 // Изображения
-IMAGE* images[5];
+IMAGE* images[8];
 
 // Индексы в массиве
 enum IMAGE_INDEX
@@ -67,13 +69,15 @@ enum IMAGE_INDEX
     IMG_BACKGROUND,
     IMG_ABOUT,
     IMG_NOTE,
-    IMG_EDAY
+    IMG_EDAY,
+    IMG_WEEKENDS,
+    IMG_ADAY,
+    IMG_NDAY
 };
 
 
 typedef struct day
 {     
-    int amount;
     char note[NOTE_SIZE];
 } day;
 

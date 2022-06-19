@@ -8,6 +8,7 @@
 int y = 0;
 int m = 0;
 int d = 0;
+int today = 0;
 
 // Загрузка изображений
 void load_images()
@@ -17,6 +18,9 @@ void load_images()
     images[IMG_ABOUT] = loadBMP("about.bmp");
     images[IMG_NOTE] = loadBMP("note.bmp");
     images[IMG_EDAY] = loadBMP("event_day.bmp");
+    images[IMG_WEEKENDS] = loadBMP("weekends.bmp");
+    images[IMG_ADAY] = loadBMP("another_day.bmp");
+    images[IMG_NDAY] = loadBMP("now_day.bmp");
 }
 
 // Выгрузка изображений
@@ -27,6 +31,9 @@ void unload_images()
     free(images[IMG_ABOUT]);
     free(images[IMG_NOTE]);
     free(images[IMG_EDAY]);
+    free(images[IMG_WEEKENDS]);
+    free(images[IMG_ADAY]);
+    free(images[IMG_NDAY]);
 }
 
 // Загрузить записи из файла
@@ -127,6 +134,8 @@ void clear_calendar()
     bar(CALENDAR_X, CALENDAR_Y, CALENDAR_X+CALENDAR_W, CALENDAR_Y+CALENDAR_H);
 }
 
+
+//Распределение дней недели
 int day_of_week()
 {
     struct tm time = { 0 };
@@ -136,6 +145,30 @@ int day_of_week()
     mktime(&time);
     return (time.tm_wday + 6) % 7;
 }
+
+//Дни предыдущего месяца
+int day_prev()
+{
+    struct tm time = { 0 };
+    time.tm_year = y+2022 - 1900;
+    time.tm_mon = m-1;
+    time.tm_mday = 1;
+    mktime(&time);
+    return (time.tm_wday + 6) % 7;
+}
+
+
+//Дни следующего месяца
+int day_next()
+{
+    struct tm time = { 0 };
+    time.tm_year = y+2022 - 1900;
+    time.tm_mon = m+1;
+    time.tm_mday = 1;
+    mktime(&time);
+    return (time.tm_wday + 6) % 7;
+}
+
 
 // Обновить поле текущего года новым значением y
 void update_year()
@@ -164,19 +197,50 @@ void draw_days()
 
     int n = days_in_month(y+2022, m);
     int s = day_of_week();
+    int k = day_prev();
+    int h = day_next();
 
     for(int i = 0; i < n; i++)
     {
         int dx = (DAY_W+DAY_DIST_X)*((i+s)%7);
         int dy = (DAY_H+DAY_DIST_Y)*((i+s)/7);
        
-        if(years[y].months[m].days[i].amount != 0)
-        putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0);
+        if(years[y].months[i].amount != 0)
+          putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); //выделение заметок
+        
+        if(s == 4 || s == 5)
+          putimage(WDAY_X+dx, WDAY_Y+dy, images[IMG_WEEKENDS], 0); //выделение выходных
+        
+       /* int p;
+        if(p == time.tm_mday)  //выделение текущего дня
+           {
+            today = 1;
+            putimage(dx, dy, images[IMG_NDAY], 0);
+           }*/
 
         char num[3];
         sprintf(num, "%d", i+1);
         outtextxy(DAY_X+dx, DAY_Y+dy, num);
     }
+   /* for(int prev = 0; prev < n; prev++)
+     {
+       int dx = (DAY_W+DAY_DIST_X)*((prev+k)%7);
+       int dy = (DAY_H+DAY_DIST_Y)*((prev+k)/7);
+        
+        char num[3];
+        sprintf(num, "%d", prev);
+        outtextxy(DAY_X+dx, DAY_Y+dy, num);
+     }
+     
+       for(int next = 0; next < n; next++)
+     {
+       int dx = (DAY_W+DAY_DIST_X)*((next+h)%7);
+       int dy = (DAY_H+DAY_DIST_Y)*((next+h)/7);
+        
+        char num[3];
+        sprintf(num, "%d", next);
+        outtextxy(DAY_X+dx, DAY_Y+dy, num);
+     }   */
 }
 
 // Проверить, нажаты ли дни календаря и если да выставить d нажатым днем
