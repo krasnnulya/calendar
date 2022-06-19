@@ -181,7 +181,7 @@ void draw_days()
         if(years[y].months[m].days[i].note != 0) //выделение заметок
           putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); 
         
-        if( i == 4 || i == 5) //выделение выходных
+        if(i == 4 || i == 5) //выделение выходных
            /*setfillstyle(SOLID_FILL, COLOR(93, 146, 216));
            bar(WDAY_X, WDAY_Y, 344, 440); */
             putimage(WDAY_X, WDAY_Y, images[IMG_WEEKENDS], 0); 
@@ -226,7 +226,7 @@ int is_days_clicked(int cx, int cy)
     return 0;
 }
 
-// Обработчик заметки (ввод текста и сохранение/отмена)
+// Обработчик заметки (ввод текста и сохранение)
 void note_handler()
 {
     putimage(NOTE_X, NOTE_Y, images[IMG_NOTE], 0);
@@ -265,26 +265,21 @@ void note_handler()
 
             outtextxy(TEXT_X, TEXT_Y, out);
         }
-        else if(mousebuttons() == 1)  
+         else if(mousebuttons() == 1) //сохранение
         {
             while(mousebuttons() != 0);
 
             int cx = mousex();
             int cy = mousey();
 
-            if(26 < cx && cx < 156 && 673 < cy && cy < 698) //сохранение
+            if(26 < cx && cx < 156 && 673 < cy && cy < 698)
             {
                 strcpy(years[y].months[m].days[d].note, out);
                 save_notes();
                 setusercharsize(1, 1, 1, 1);
                 break;
             }
-            else if (184 < cx && cx < 314 && 673 < cy && cy < 698) //отмена
-            {
-               setusercharsize(1, 1, 1, 1);
-               break;
-            }
-         }
+        }
     }
 }
 
