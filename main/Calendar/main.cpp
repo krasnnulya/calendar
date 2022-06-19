@@ -146,29 +146,6 @@ int day_of_week()
     return (time.tm_wday + 6) % 7;
 }
 
-//ƒни предыдущего мес€ца
-int day_prev()
-{
-    struct tm time = { 0 };
-    time.tm_year = y+2022 - 1900;
-    time.tm_mon = m-1;
-    time.tm_mday = 1;
-    mktime(&time);
-    return (time.tm_wday + 6) % 7;
-}
-
-
-//ƒни следующего мес€ца
-int day_next()
-{
-    struct tm time = { 0 };
-    time.tm_year = y+2022 - 1900;
-    time.tm_mon = m+1;
-    time.tm_mday = 1;
-    mktime(&time);
-    return (time.tm_wday + 6) % 7;
-}
-
 
 // ќбновить поле текущего года новым значением y
 void update_year()
@@ -222,25 +199,6 @@ void draw_days()
         sprintf(num, "%d", i+1);
         outtextxy(DAY_X+dx, DAY_Y+dy, num);
     }
-   /* for(int prev = 0; prev < n; prev++)
-     {
-       int dx = (DAY_W+DAY_DIST_X)*((prev+k)%7);
-       int dy = (DAY_H+DAY_DIST_Y)*((prev+k)/7);
-        
-        char num[3];
-        sprintf(num, "%d", prev);
-        outtextxy(DAY_X+dx, DAY_Y+dy, num);
-     }
-     
-       for(int next = 0; next < n; next++)
-     {
-       int dx = (DAY_W+DAY_DIST_X)*((next+h)%7);
-       int dy = (DAY_H+DAY_DIST_Y)*((next+h)/7);
-        
-        char num[3];
-        sprintf(num, "%d", next);
-        outtextxy(DAY_X+dx, DAY_Y+dy, num);
-     }   */
 }
 
 // ѕроверить, нажаты ли дни календар€ и если да выставить d нажатым днем

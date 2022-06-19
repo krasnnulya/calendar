@@ -58,9 +58,7 @@ clear_week() -> void #<main0.cpp>
 clear_year() -> void #<main.cpp>
 d : int #<main.cpp>
 day _type_ #<header.h>
-day_next() -> int #<main.cpp>
 day_of_week() -> int #<main.cpp>
-day_prev() -> int #<main.cpp>
 days_in_month(int year, int month) -> int #<header.h>
 dim : const int[] #<header.h>
 draw_days() -> void #<main.cpp>
