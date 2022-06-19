@@ -1,6 +1,7 @@
 # header.h
 !header.h graphics.h keys_n_colors.h #<#>
 !main.cpp graphics.h header.h keys_n_colors.h limits.h stdio.h stdlib.h time.h #<#>
+!main0.cpp graphics.h header.h keys_n_colors.h limits.h stdio.h stdlib.h time.h #<#>
  struct@day _type_ #<header.h>
  struct@month _type_ #<header.h>
  struct@year _type_ #<header.h>
@@ -29,6 +30,8 @@ NOTE_SIZE #<header.h>
 NOTE_W #<header.h>
 NOTE_X #<header.h>
 NOTE_Y #<header.h>
+PLANS_OFFSET_X #<header.h>
+PLANS_OFFSET_Y #<header.h>
 TEXT_H #<header.h>
 TEXT_W #<header.h>
 TEXT_X #<header.h>
@@ -49,10 +52,11 @@ calendar_update() -> void #<main.cpp>
 clear_calendar() -> void #<main.cpp>
 clear_month() -> void #<main.cpp>
 clear_text() -> void #<main.cpp>
-clear_week() -> void #<main.cpp>
+clear_week() -> void #<main0.cpp>
 clear_year() -> void #<main.cpp>
 d : int #<main.cpp>
 day _type_ #<header.h>
+day_of_week() -> int #<main.cpp>
 days_in_month(int year, int month) -> int #<header.h>
 dim : const int[] #<header.h>
 draw_days() -> void #<main.cpp>
@@ -71,12 +75,13 @@ note_handler() -> void #<main.cpp>
 save_notes() -> void #<main.cpp>
 unload_images() -> void #<main.cpp>
 update_month() -> void #<main.cpp>
-update_week() -> void #<main.cpp>
+update_week() -> void #<main0.cpp>
 update_year() -> void #<main.cpp>
 week : const char*[] #<header.h>
 y : int #<main.cpp>
 year _type_ #<header.h>
 years : year[] #<header.h>
+	day::amount : int #<header.h>
 	day::note : char[] #<header.h>
 	month::amount : int #<header.h>
 	month::days : day[] #<header.h>

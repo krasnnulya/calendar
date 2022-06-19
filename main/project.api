@@ -1,8 +1,8 @@
 # header.h
 !calendar.cpp stdio.h time.h #<#>
 !header.h graphics.h keys_n_colors.h #<#>
-!main.cpp graphics.h keys_n_colors.h limits.h stdio.h stdlib.h time.h #<#>
 !test.c stdio.h time.h #<#>
+!view.cpp graphics.h keys_n_colors.h limits.h stdio.h stdlib.h time.h #<#>
  struct@date _type_ #<header.h>
  struct@day _type_ #<header.h>
  struct@month _type_ #<header.h>
@@ -30,45 +30,45 @@ PLANS_OFFSET_Y #<header.h>
 TIME_H #<header.h>
 TIME_X #<header.h>
 TIME_Y #<header.h>
-about_handler() -> void #<main.cpp>
-calendar_handler() -> void #<main.cpp>
-calendar_update() -> void #<main.cpp>
-clear_month() -> void #<main.cpp>
-clear_note() -> void #<main.cpp>
-clear_year() -> void #<main.cpp>
-curDay : int #<main.cpp>
-curMonth : int #<main.cpp>
-curPage : int #<main.cpp>
-curWeekday : int #<main.cpp>
-curYear : int #<main.cpp>
-d : int #<main.cpp>
-date : int #<main.cpp>
+about_handler() -> void #<view.cpp>
+calendar_handler() -> void #<view.cpp>
+calendar_update() -> void #<view.cpp>
+clear_month() -> void #<view.cpp>
+clear_note() -> void #<view.cpp>
+clear_year() -> void #<view.cpp>
+curDay : int #<view.cpp>
+curMonth : int #<view.cpp>
+curPage : int #<view.cpp>
+curWeekday : int #<view.cpp>
+curYear : int #<view.cpp>
+d : int #<view.cpp>
+date : int #<view.cpp>
 date _type_ #<header.h>
 day _type_ #<header.h>
 days_in_month(int year, int month) -> int #<header.h>
-days_in_month(int year1, int month1) -> int #<main.cpp>
+days_in_month(int year1, int month1) -> int #<view.cpp>
 dim : const int[] #<header.h>
-draw_days(int y, int m) -> void #<main.cpp>
-draw_weekdays(int wday) -> void #<main.cpp>
-event_handler() -> void #<main.cpp>
+draw_days(int y, int m) -> void #<view.cpp>
+draw_weekdays(int wday) -> void #<view.cpp>
+event_handler() -> void #<view.cpp>
 getmaxdays(int month, int year) -> int #<calendar.cpp>
 images : IMAGE*[] #<header.h>
-init() -> void #<main.cpp>
-is_days_clicked(int x, int y) -> int #<main.cpp>
+init() -> void #<view.cpp>
+is_days_clicked(int x, int y) -> int #<view.cpp>
 is_leap_year(int year) -> int #<header.h>
-is_leap_year(int year1) -> int #<main.cpp>
-load_images() -> void #<main.cpp>
-load_notes() -> void #<main.cpp>
-main() -> int #<main.cpp>
+is_leap_year(int year1) -> int #<view.cpp>
+load_images() -> void #<view.cpp>
+load_notes() -> void #<view.cpp>
+main() -> int #<test.c>
 main(void) -> int #<calendar.cpp>
 month _type_ #<header.h>
-month_str(int m) -> const char* #<main.cpp>
-months : month[] #<main.cpp>
+month_str(int m) -> const char* #<view.cpp>
+months : month[] #<view.cpp>
 mts : const char*[] #<header.h>
-save_notes() -> void #<main.cpp>
-unload_images() -> void #<main.cpp>
-update_month() -> void #<main.cpp>
-update_year() -> void #<main.cpp>
+save_notes() -> void #<view.cpp>
+unload_images() -> void #<view.cpp>
+update_month() -> void #<view.cpp>
+update_year() -> void #<view.cpp>
 weekday(int dat, int month, int year) -> int #<calendar.cpp>
 weekday(struct tm* dt) -> int #<test.c>
 wname : const char*[] #<header.h>
@@ -79,10 +79,10 @@ years : year[] #<header.h>
 	date::month : int #<header.h>
 	date::weekday : int #<header.h>
 	date::day : int #<header.h>
-	day::isEmpty : int #<main.cpp>
-	day::note : char[] #<main.cpp>
-	day::amount : int #<main.cpp>
-	month::amount : int #<main.cpp>
-	month::days : day[] #<main.cpp>
-	year::amount : int #<main.cpp>
-	year::months : month[] #<main.cpp>
+	day::isEmpty : int #<view.cpp>
+	day::note : char[] #<view.cpp>
+	day::amount : int #<view.cpp>
+	month::amount : int #<view.cpp>
+	month::days : day[] #<view.cpp>
+	year::amount : int #<view.cpp>
+	year::months : month[] #<view.cpp>

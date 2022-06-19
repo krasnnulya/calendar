@@ -16,6 +16,7 @@ void load_images()
     images[IMG_BACKGROUND] = loadBMP("background.bmp");
     images[IMG_ABOUT] = loadBMP("about.bmp");
     images[IMG_NOTE] = loadBMP("note.bmp");
+    images[IMG_EDAY] = loadBMP("event_day.bmp");
 }
 
 // Выгрузка изображений
@@ -25,6 +26,7 @@ void unload_images()
     free(images[IMG_BACKGROUND]);
     free(images[IMG_ABOUT]);
     free(images[IMG_NOTE]);
+    free(images[IMG_EDAY]);
 }
 
 // Загрузить записи из файла
@@ -90,6 +92,7 @@ void init()
     }
 }
 
+
 // Получить название месяца по номеру (0-11 --> январь, февраль...)
 const char* month_str(int m)
 {
@@ -101,12 +104,6 @@ void clear_month()
 {
     setfillstyle(SOLID_FILL, BLUE_);
     bar(MONTH_X, MONTH_Y, MONTH_X+MONTH_W, MONTH_Y+MONTH_H);
-}
-
-void clear_week()
-{
-    setfillstyle(SOLID_FILL, BLUE_);
-    bar(WEEK_X, WEEK_Y, WEEK_X+WEEK_W, WEEK_Y+WEEK_H);
 }
 
 // Очистить текст заметки
@@ -130,23 +127,15 @@ void clear_calendar()
     bar(CALENDAR_X, CALENDAR_Y, CALENDAR_X+CALENDAR_W, CALENDAR_Y+CALENDAR_H);
 }
 
-void update_week()
+int day_of_week()
 {
-    clear_week();
-
     struct tm time = { 0 };
     time.tm_year = y+2022 - 1900;
     time.tm_mon = m;
-    time.tm_mday = d+1;
+    time.tm_mday = 1;
     mktime(&time);
-    int w = (time.tm_wday + 6) % 7;
-
-    for(int i = 0; i < 7; i++)
-    {
-        outtextxy(WEEK_X+(DAY_W+DAY_DIST_X)*i, WEEK_Y, week[w+i]);
-    }
+    return (time.tm_wday + 6) % 7;
 }
-
 
 // Обновить поле текущего года новым значением y
 void update_year()
@@ -174,10 +163,15 @@ void draw_days()
     settextjustify(CENTER_TEXT, CENTER_TEXT);
 
     int n = days_in_month(y+2022, m);
+    int s = day_of_week();
+
     for(int i = 0; i < n; i++)
     {
-        int dx = (DAY_W+DAY_DIST_X)*(i%7);
-        int dy = (DAY_H+DAY_DIST_Y)*(i/7);
+        int dx = (DAY_W+DAY_DIST_X)*((i+s)%7);
+        int dy = (DAY_H+DAY_DIST_Y)*((i+s)/7);
+       
+        if(years[y].months[m].days[i].amount != 0)
+        putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0);
 
         char num[3];
         sprintf(num, "%d", i+1);
@@ -194,11 +188,12 @@ int is_days_clicked(int cx, int cy)
         int uy = cy-CALENDAR_Y;
 
         int n = days_in_month(y+2022, m);
+        int s = day_of_week();
 
         for(int i = 0; i < n; i++)
         {
-            int dx = (DAY_W+DAY_DIST_X)*(i%7);
-            int dy = (DAY_H+DAY_DIST_Y)*(i/7);
+            int dx = (DAY_W+DAY_DIST_X)*((i+s)%7);
+            int dy = (DAY_H+DAY_DIST_Y)*((i+s)/7);
 
             if(dx < ux && ux < dx+DAY_W && dy < uy && uy < dy+DAY_H)
             {
@@ -211,7 +206,7 @@ int is_days_clicked(int cx, int cy)
     return 0;
 }
 
-// Обработчик заметки (ввод текста и сохранение)
+// Обработчик заметки (ввод текста и сохранение/отмена)
 void note_handler()
 {
     putimage(NOTE_X, NOTE_Y, images[IMG_NOTE], 0);
@@ -250,21 +245,26 @@ void note_handler()
 
             outtextxy(TEXT_X, TEXT_Y, out);
         }
-        else if(mousebuttons() == 1)
+        else if(mousebuttons() == 1)  
         {
             while(mousebuttons() != 0);
 
             int cx = mousex();
             int cy = mousey();
 
-            if(26 < cx && cx < 156 && 673 < cy && cy < 698)
+            if(26 < cx && cx < 156 && 673 < cy && cy < 698) //сохранение
             {
                 strcpy(years[y].months[m].days[d].note, out);
                 save_notes();
                 setusercharsize(1, 1, 1, 1);
                 break;
             }
-        }
+            else if (184 < cx && cx < 314 && 673 < cy && cy < 698) //отмена
+            {
+               setusercharsize(1, 1, 1, 1);
+               break;
+            }
+         }
     }
 }
 
@@ -279,7 +279,6 @@ void calendar_update()
 
     update_year();
     update_month();
-    update_week();
 
     draw_days();
 }

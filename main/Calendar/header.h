@@ -22,7 +22,7 @@
 #define CALENDAR_X 23
 #define CALENDAR_Y 173
 #define CALENDAR_W 322
-#define CALENDAR_H 247
+#define CALENDAR_H 289
 
 #define DAY_X 40
 #define DAY_Y 203
@@ -53,8 +53,12 @@
 #define WEEK_H 174
 
 
+#define PLANS_OFFSET_X 50
+#define PLANS_OFFSET_Y 230
+
+
 // Изображения
-IMAGE* images[4];
+IMAGE* images[5];
 
 // Индексы в массиве
 enum IMAGE_INDEX
@@ -62,12 +66,14 @@ enum IMAGE_INDEX
     IMG_MAIN,
     IMG_BACKGROUND,
     IMG_ABOUT,
-    IMG_NOTE
+    IMG_NOTE,
+    IMG_EDAY
 };
 
 
 typedef struct day
-{
+{     
+    int amount;
     char note[NOTE_SIZE];
 } day;
 
