@@ -18,7 +18,6 @@ void load_images()
     images[IMG_ABOUT] = loadBMP("about.bmp");
     images[IMG_NOTE] = loadBMP("note.bmp");
     images[IMG_EDAY] = loadBMP("event_day.bmp");
-    images[IMG_WEEKENDS] = loadBMP("weekends.bmp");
     images[IMG_NDAY] = loadBMP("now_day.bmp");
 }
 
@@ -30,7 +29,6 @@ void unload_images()
     free(images[IMG_ABOUT]);
     free(images[IMG_NOTE]);
     free(images[IMG_EDAY]);
-    free(images[IMG_WEEKENDS]);
     free(images[IMG_NDAY]);
 }
 
@@ -180,11 +178,6 @@ void draw_days()
        
         if(years[y].months[m].days[i].note != 0) //выделение заметок
           putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); 
-        
-        if(i == 4 || i == 5) //выделение выходных
-           /*setfillstyle(SOLID_FILL, COLOR(93, 146, 216));
-           bar(WDAY_X, WDAY_Y, 344, 440); */
-            putimage(WDAY_X, WDAY_Y, images[IMG_WEEKENDS], 0); 
       
        /* int p;
         if(p == time.tm_mday)  //выделение текущего дня
