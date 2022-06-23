@@ -5,10 +5,9 @@
 #include "header.h"
 
 // Текущие год, месяц и день
-int y = 0;
-int m = 0;
-int d = 0;
-int today = 0;
+int GlobY = 0;
+int GlobM = 5;
+int GlobD = 0;
 
 // Загрузка изображений
 void load_images()
@@ -96,10 +95,28 @@ void init()
 }
 
 
+/*void notes() {
+    FILE *note = NULL;
+    int number;
+ 
+    note = fopen("D:/c/note.bin", "wb");
+    if (note == NULL) {
+        sprintf("Error opening file");
+        getch();
+        exit(ERROR_FILE_OPEN);
+    }
+ 
+    scanf("%d", &number);
+    fwrite(&number, sizeof(int), 1, note);
+ 
+    fclose(output);
+    _getch();
+}*/
+
 // Получить название месяца по номеру (0-11 --> январь, февраль...)
-const char* month_str(int m)
+const char* month_str(int GlobM)
 {
-    return mts[m];
+    return mts[GlobM];
 }
 
 // Очистить поле текущего месяца
@@ -135,32 +152,44 @@ void clear_calendar()
 int day_of_week()
 {
     struct tm time = { 0 };
-    time.tm_year = y+2022 - 1900;
-    time.tm_mon = m;
+    time.tm_year = GlobY+2022 - 1900;
+    time.tm_mon = GlobM;
     time.tm_mday = 1;
     mktime(&time);
     return (time.tm_wday + 6) % 7;
 }
 
 
-// Обновить поле текущего года новым значением y
+// Обновить поле текущего года новым значением GlobY
 void update_year()
 {
     clear_year();
 
     char yearStr[5];
-    sprintf(yearStr, "%d", y+2022);
+    sprintf(yearStr, "%d", GlobY+2022);
     settextjustify(CENTER_TEXT, CENTER_TEXT);
     outtextxy(YEAR_TEXT_X, YEAR_TEXT_Y, yearStr);
 }
 
-// Обновить поле текущего месяца новым значение m
+// Обновить поле текущего месяца новым значение GlobM
 void update_month()
 {
     clear_month();
     settextjustify(CENTER_TEXT, CENTER_TEXT);
-    outtextxy(MONTH_TEXT_X, MONTH_TEXT_Y, month_str(m));
+    outtextxy(MONTH_TEXT_X, MONTH_TEXT_Y, month_str(GlobM));
 }
+
+//Возвращение текущей даты у компьютера
+int today(int &year1, int &month1, int &day1)
+{
+   const time_t t1 = time(NULL);
+   struct tm* aTm = localtime(&t1);
+   year1 = aTm->tm_year+1900;
+   month1 = aTm->tm_mon+1;
+   day1 = aTm->tm_mday;
+   return 0;
+}
+
 
 // Нарисовать дни календаря
 void draw_days()
@@ -168,23 +197,24 @@ void draw_days()
     clear_calendar();
     settextjustify(CENTER_TEXT, CENTER_TEXT);
    
-    int n = days_in_month(y+2022, m);
+    int n = days_in_month(GlobY+2022, GlobM);
     int s = day_of_week();
+    int p = today(GlobY, GlobM, GlobD);
 
     for(int i = 0; i < n; i++)
     {
         int dx = (DAY_W+DAY_DIST_X)*((i+s)%7);
         int dy = (DAY_H+DAY_DIST_Y)*((i+s)/7);
        
-        if(years[y].months[m].days[i].note != 0) //выделение заметок
+        if(years[GlobY].months[GlobM].days[i].note != 0) //выделение заметок
           putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); 
       
-       /* int p;
-        if(p == time.tm_mday)  //выделение текущего дня
+
+        if(p == GlobD)  //выделение текущего дня
            {
-            today = 1;
+            GlobD = 1;
             putimage(dx, dy, images[IMG_NDAY], 0);
-           }*/
+           }
 
         char num[3];
         sprintf(num, "%d", i+1);
@@ -200,7 +230,7 @@ int is_days_clicked(int cx, int cy)
         int ux = cx-CALENDAR_X;
         int uy = cy-CALENDAR_Y;
 
-        int n = days_in_month(y+2022, m);
+        int n = days_in_month(GlobY+2022, GlobM);
         int s = day_of_week();
 
         for(int i = 0; i < n; i++)
@@ -210,7 +240,7 @@ int is_days_clicked(int cx, int cy)
 
             if(dx < ux && ux < dx+DAY_W && dy < uy && uy < dy+DAY_H)
             {
-                d = i;
+                GlobD = i;
                 return 1;
             }
         }
@@ -226,7 +256,7 @@ void note_handler()
 
     char out[NOTE_SIZE];
     memset(out, '\0', NOTE_SIZE);
-    strcpy(out, years[y].months[m].days[d].note);
+    strcpy(out, years[GlobY].months[GlobM].days[GlobD].note);
 
     settextjustify(LEFT_TEXT, CENTER_TEXT);
     settextstyle(COMPLEX_FONT, HORIZ_DIR, USER_CHAR_SIZE);
@@ -267,7 +297,7 @@ void note_handler()
 
             if(26 < cx && cx < 156 && 673 < cy && cy < 698)
             {
-                strcpy(years[y].months[m].days[d].note, out);
+                strcpy(years[GlobY].months[GlobM].days[GlobD].note, out);
                 save_notes();
                 setusercharsize(1, 1, 1, 1);
                 break;
@@ -310,25 +340,25 @@ void calendar_handler()
         }
         else if(47 <= cx && cx <= 65 && 61 <= cy && cy <= 90)
         {
-            if(!(y == 0 && m == 0))
+            if(!(GlobY == 0 && GlobM == 0))
             {
-                m--;
-                if(m < 0)
+                GlobM--;
+                if(GlobM < 0)
                 {
-                    m = 11;
-                    y--;
+                    GlobM = 11;
+                    GlobY--;
                 }
             }
         }
         else if(292 <= cx && cx <= 310 && 61 <= cy && cy <= 90)
         {
-            if(!(y == 4 && m == 11))
+            if(!(GlobY == 4 && GlobM == 11))
             {
-                m++;
-                if(m > 11)
+                GlobM++;
+                if(GlobM > 11)
                 {
-                    m = 0;
-                    y++;
+                    GlobM = 0;
+                    GlobY++;
                 }
             }
         }
@@ -360,7 +390,7 @@ void about_handler()
 // Главная функция
 int main()
 {
-    int win = initwindow(361, 750);
+    int win = initwindow(361, 750, "Календарь");
     setcurrentwindow(win);
 
     cleardevice();

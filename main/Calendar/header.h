@@ -3,7 +3,12 @@
 
 #include "graphics.h"
 
+// Макросы определяют положения объектов
+// Чтобы не вводить каждый раз вручную
+
 #define BLUE_ COLOR(144, 185, 233)
+
+//#define ERROR_FILE_OPEN -3
 
 #define MONTH_X 75
 #define MONTH_Y 62
@@ -133,5 +138,7 @@ int days_in_month(int year, int month)
 
     else return dim[month];
 }
+
+
 
 #endif

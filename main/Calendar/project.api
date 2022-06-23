@@ -17,6 +17,9 @@ DAY_X #<header.h>
 DAY_Y #<header.h>
 EDIT_X #<header.h>
 EDIT_Y #<header.h>
+GlobD : int #<main.cpp>
+GlobM : int #<main.cpp>
+GlobY : int #<main.cpp>
 IMAGE_INDEX : enum #<header.h>
 MONTH_H #<header.h>
 MONTH_TEXT_X #<header.h>
@@ -54,7 +57,6 @@ clear_calendar() -> void #<main.cpp>
 clear_month() -> void #<main.cpp>
 clear_text() -> void #<main.cpp>
 clear_year() -> void #<main.cpp>
-d : int #<main.cpp>
 day _type_ #<header.h>
 day_of_week() -> int #<main.cpp>
 days_in_month(int year, int month) -> int #<header.h>
@@ -66,19 +68,17 @@ is_days_clicked(int cx, int cy) -> int #<main.cpp>
 is_leap_year(int year) -> int #<header.h>
 load_images() -> void #<main.cpp>
 load_notes() -> void #<main.cpp>
-m : int #<main.cpp>
 main() -> int #<main.cpp>
 month _type_ #<header.h>
-month_str(int m) -> const char* #<main.cpp>
+month_str(int GlobM) -> const char* #<main.cpp>
 mts : const char*[] #<header.h>
 note_handler() -> void #<main.cpp>
 save_notes() -> void #<main.cpp>
-today : int #<main.cpp>
+today(int& year1, int& month1, int& day1) -> int #<main.cpp>
 unload_images() -> void #<main.cpp>
 update_month() -> void #<main.cpp>
 update_year() -> void #<main.cpp>
 week : const char*[] #<header.h>
-y : int #<main.cpp>
 year _type_ #<header.h>
 years : year[] #<header.h>
 	day::note : char[] #<header.h>
