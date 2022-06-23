@@ -199,7 +199,7 @@ void draw_days()
    
     int n = days_in_month(GlobY+2022, GlobM);
     int s = day_of_week();
-    int p = today(GlobY, GlobM, GlobD);
+   // int p = today(GlobY, GlobM, GlobD);
 
     for(int i = 0; i < n; i++)
     {
@@ -210,11 +210,11 @@ void draw_days()
           putimage(PLANS_OFFSET_X+dx, PLANS_OFFSET_Y+dy, images[IMG_EDAY], 0); 
       
 
-        if(p == GlobD)  //выделение текущего дня
+      /*  if(p == GlobD)  //выделение текущего дня
            {
             GlobD = 1;
             putimage(dx, dy, images[IMG_NDAY], 0);
-           }
+           }*/
 
         char num[3];
         sprintf(num, "%d", i+1);
