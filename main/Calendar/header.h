@@ -65,17 +65,17 @@
 
 
 // Изображения
-IMAGE* images[6];
+IMAGE *images[6];
 
 // Индексы в массиве
 enum IMAGE_INDEX
 {
-    IMG_MAIN,
-    IMG_BACKGROUND,
-    IMG_ABOUT,
-    IMG_NOTE,
-    IMG_EDAY,
-    IMG_NDAY
+   IMG_MAIN,
+   IMG_BACKGROUND,
+   IMG_ABOUT,
+   IMG_NOTE,
+   IMG_EDAY,
+   IMG_NDAY
 };
 
 /*struct button
@@ -84,19 +84,20 @@ enum IMAGE_INDEX
 } button;*/
 
 typedef struct day
-{     
-    char note[NOTE_SIZE];
+{
+   char note[NOTE_SIZE];
+   int is_empty = 1;
 } day;
 
 typedef struct month
 {
-    int amount;
-    day days[31];
+   int amount;
+   day days[31];
 } month;
 
 typedef struct year
 {
-    month months[12];
+   month months[12];
 } year;
 
 // Записи в виде дерева
@@ -104,7 +105,7 @@ year years[5];
 
 // Кол-во дней в месяцах
 const int dim[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-const char* mts[12] = { "Январь",
+const char *mts[12] = { "Январь",
                         "Февраль",
                         "Март",
                         "Апрель",
@@ -115,35 +116,36 @@ const char* mts[12] = { "Январь",
                         "Сентябрь",
                         "Октябрь",
                         "Ноябрь",
-                        "Декабрь"};
+                        "Декабрь"
+                      };
 
-const char* week[13] = {"ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"};
+const char *week[13] = {"ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"};
 
 // Проверка на високосность
 int is_leap_year(int year)
 {
-    if(year % 400 == 0)
-        return 1;
+   if (year % 400 == 0)
+      return 1;
 
-    if(year % 100 == 0)
-        return 0;
+   if (year % 100 == 0)
+      return 0;
 
-    if(year % 4 == 0)
-        return 1;
+   if (year % 4 == 0)
+      return 1;
 
-    return false;
+   return false;
 }
 
 // Количество дней в месяце
 int days_in_month(int year, int month)
 {
-    if(is_leap_year(year) && month == 1)
-        return 29;
+   if (is_leap_year(year) && month == 1)
+      return 29;
 
-    else return dim[month];
+   else return dim[month];
 }
 
 
 
-   
+
 #endif
