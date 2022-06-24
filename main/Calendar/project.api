@@ -83,6 +83,7 @@ week : const char*[] #<header.h>
 year _type_ #<header.h>
 years : year[] #<header.h>
 	day::note : char[] #<header.h>
+	day::is_empty : int #<header.h>
 	month::amount : int #<header.h>
 	month::days : day[] #<header.h>
 	year::months : month[] #<header.h>
