@@ -75,7 +75,6 @@ month_str(int GlobM) -> const char* #<maain.cpp>
 mts : const char*[] #<header.h>
 note_handler() -> void #<maain.cpp>
 save_notes() -> void #<maain.cpp>
-today() -> int #<main.cpp>
 today(int& year1, int& month1, int& day1) -> int #<maain.cpp>
 unload_images() -> void #<maain.cpp>
 update_month() -> void #<maain.cpp>
