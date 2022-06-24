@@ -1,0 +1,89 @@
+# header.h
+!header.h graphics.h keys_n_colors.h #<#>
+!maain.cpp graphics.h header.h keys_n_colors.h limits.h stdio.h stdlib.h time.h #<#>
+!main.cpp graphics.h header.h keys_n_colors.h limits.h stdio.h stdlib.h time.h #<#>
+ struct@day _type_ #<header.h>
+ struct@month _type_ #<header.h>
+ struct@year _type_ #<header.h>
+BLUE_ #<header.h>
+CALENDAR_H #<header.h>
+CALENDAR_W #<header.h>
+CALENDAR_X #<header.h>
+CALENDAR_Y #<header.h>
+DAY_DIST_X #<header.h>
+DAY_DIST_Y #<header.h>
+DAY_H #<header.h>
+DAY_W #<header.h>
+DAY_X #<header.h>
+DAY_Y #<header.h>
+EDIT_X #<header.h>
+EDIT_Y #<header.h>
+GlobD : int #<maain.cpp>
+GlobM : int #<maain.cpp>
+GlobY : int #<maain.cpp>
+IMAGE_INDEX : enum #<header.h>
+MONTH_H #<header.h>
+MONTH_TEXT_X #<header.h>
+MONTH_TEXT_Y #<header.h>
+MONTH_W #<header.h>
+MONTH_X #<header.h>
+MONTH_Y #<header.h>
+NOTE_H #<header.h>
+NOTE_SIZE #<header.h>
+NOTE_W #<header.h>
+NOTE_X #<header.h>
+NOTE_Y #<header.h>
+PLANS_OFFSET_X #<header.h>
+PLANS_OFFSET_Y #<header.h>
+TEXT_H #<header.h>
+TEXT_W #<header.h>
+TEXT_X #<header.h>
+TEXT_Y #<header.h>
+WDAY_X #<header.h>
+WDAY_Y #<header.h>
+WEEK_H #<header.h>
+WEEK_W #<header.h>
+WEEK_X #<header.h>
+WEEK_Y #<header.h>
+YEAR_H #<header.h>
+YEAR_TEXT_X #<header.h>
+YEAR_TEXT_Y #<header.h>
+YEAR_W #<header.h>
+YEAR_X #<header.h>
+YEAR_Y #<header.h>
+about_handler() -> void #<maain.cpp>
+calendar_handler() -> void #<maain.cpp>
+calendar_update() -> void #<maain.cpp>
+clear_calendar() -> void #<maain.cpp>
+clear_month() -> void #<maain.cpp>
+clear_text() -> void #<maain.cpp>
+clear_year() -> void #<maain.cpp>
+day _type_ #<header.h>
+day_of_week() -> int #<maain.cpp>
+days_in_month(int year, int month) -> int #<header.h>
+dim : const int[] #<header.h>
+draw_days() -> void #<maain.cpp>
+images : IMAGE*[] #<header.h>
+init() -> void #<maain.cpp>
+is_days_clicked(int cx, int cy) -> int #<maain.cpp>
+is_leap_year(int year) -> int #<header.h>
+load_images() -> void #<maain.cpp>
+load_notes() -> void #<maain.cpp>
+main() -> int #<maain.cpp>
+month _type_ #<header.h>
+month_str(int GlobM) -> const char* #<maain.cpp>
+mts : const char*[] #<header.h>
+note_handler() -> void #<maain.cpp>
+save_notes() -> void #<maain.cpp>
+today() -> int #<main.cpp>
+today(int& year1, int& month1, int& day1) -> int #<maain.cpp>
+unload_images() -> void #<maain.cpp>
+update_month() -> void #<maain.cpp>
+update_year() -> void #<maain.cpp>
+week : const char*[] #<header.h>
+year _type_ #<header.h>
+years : year[] #<header.h>
+	day::note : char[] #<header.h>
+	month::amount : int #<header.h>
+	month::days : day[] #<header.h>
+	year::months : month[] #<header.h>
